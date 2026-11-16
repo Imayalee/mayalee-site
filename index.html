@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מאיה לי לוי – האתר הרשמי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wdth,wght@62.5..100,300..900&family=Heebo:wght@400;700&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          body: ['"Noto Sans Hebrew"', 'Heebo', 'system-ui', 'sans-serif'],
+          hand: ['"Yael Leibushor"', 'Heebo', 'cursive'],
+        },
+        colors: {
+          grape: { 50:'#faf5ff', 100:'#f3e8ff', 300:'#c9a0f5', 500:'#a855f7', 600:'#9333ea', 700:'#8a2fc4', 800:'#6b21a8' },
+          rose:  { 400:'#ec4899', 500:'#db2777' },
+          cocoa: '#4a3530',
+        },
+      },
+    },
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  @font-face {
+    font-family: 'Yael Leibushor';
+    src: url('yael.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  .font-hand { font-weight: 400 !important; font-synthesis: none; letter-spacing: 0.01em; }
+  html, body { background: #f7f0fc; }
+  body { font-family: 'Noto Sans Hebrew', 'Heebo', system-ui, sans-serif; font-stretch: 80%; color: #4a3530; -webkit-font-smoothing: antialiased; }
+  .title-glitch {
+    color: #9b2fc9;
+    text-shadow: -2px 2px 0 #67e8f9, 2px -1px 0 #ec4899;
+  }
+  .hero-bg { background: linear-gradient(180deg, #b26ef5 0%, #e9d5ff 42%, #f6e3f1 70%, #dcb9cc 100%); }
+  .page-bg { background: linear-gradient(180deg, #f7f0fc 0%, #fbf4fb 50%, #f7eef8 100%); }
+  .photo-fade { -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%); mask-image: linear-gradient(180deg, #000 78%, transparent 100%); }
+  .fade-in { animation: fadeIn .35s ease both; }
+  .art-enter { animation: artIn .55s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes artIn { from { opacity: 0; transform: translateY(10px) scale(.985); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+  .font-museum { font-family: 'Frank Ruhl Libre', 'Noto Sans Hebrew', serif; font-stretch: 100%; }
+  .gold-text {
+    background: linear-gradient(100deg, #a8781f 0%, #e9c45a 18%, #fff6d1 32%, #f2d06b 46%, #b8862b 62%, #f7e08a 78%, #fffbe6 88%, #c9972f 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: goldShimmer 5s linear infinite;
+    filter: drop-shadow(0 2px 14px rgba(251,191,36,0.25));
+  }
+  @keyframes goldShimmer { 0% { background-position: 100% 0; } 100% { background-position: -150% 0; } }
+  .sparkle { opacity: 0; animation-name: twinkle; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+  @keyframes twinkle { 0%,100% { opacity: 0; transform: scale(.4); } 50% { opacity: .95; transform: scale(1); } }
+  .art-frame {
+    background: linear-gradient(135deg, #8a6420 0%, #f3d77e 22%, #b8862b 45%, #fbe9a8 62%, #9c7125 82%, #e6c25c 100%);
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.85), 0 12px 24px -10px rgba(0,0,0,0.7);
+  }
+  .group:hover .art-frame {
+    box-shadow: 0 34px 70px -15px rgba(0,0,0,0.9), 0 0 0 1px rgba(253,224,71,0.45), 0 0 38px 6px rgba(251,191,36,0.38), 0 0 90px 10px rgba(251,191,36,0.15);
+  }
+  @media (prefers-reduced-motion: reduce) { .gold-text, .sparkle { animation: none; } .sparkle { opacity: .6; } }
+  .hint-bounce { animation: hintBounce 1.6s ease-in-out infinite; }
+  @keyframes hintBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+  #more { scroll-margin-top: 110px; }
+  .typing i { display:block; width:7px; height:7px; border-radius:9999px; background: linear-gradient(135deg,#a855f7,#ec4899); animation: typing 1.2s infinite ease-in-out; }
+  .typing i:nth-child(2) { animation-delay: .15s; }
+  .typing i:nth-child(3) { animation-delay: .3s; }
+  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity:.45; } 30% { transform: translateY(-5px); opacity:1; } }
+  .chip-nudge { animation: nudge 1.8s ease-in-out 3; }
+  @keyframes nudge { 0%,100% { transform: translate(0,-50%); } 50% { transform: translate(-4px,-50%); } }
+  .doodle-line { stroke-dasharray: 420; stroke-dashoffset: 420; animation: draw 1.1s .25s ease-out forwards; }
+  .doodle-head { opacity: 0; animation: headIn .25s 1.25s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes headIn { to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .doodle-line { animation: none; stroke-dashoffset: 0; } .doodle-head { animation: none; opacity: 1; } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .loading { display:flex; min-height:100vh; align-items:center; justify-content:center; font-family:Heebo, sans-serif; color:#8a2fc4; }
+</style>
+</head>
+<body>
+<div id="root"><div class="loading">טוען…</div></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect } = React;
+
+/* ============================================================
+   הגדרות – כאן מעדכנים קישורים
+   (קישור עם "#" = עדיין לא הוגדר)
+   ============================================================ */
+const LINKS = {
+  instagram: 'https://www.instagram.com/maya.leevy',
+  facebook:  'https://www.facebook.com/share/1DdVqbCCTZ/',
+  tiktok:    'https://www.tiktok.com/@imayalee',
+  x:         'https://x.com/im_mayalee',
+  calculator:'https://beactive.co.il/project/92644',   // עזרו לי להיאבק על האמת
+  book:      'https://wa.me/c/972547401314',   // הספר שלי
+  whatsapp:  'https://whatsapp.com/channel/0029VamSaELEawdoxZkaD406',   // ערוץ הוואטסאפ שלי
+  work:      '#',   // להצעות שת"פים ועבודה
+  tweet:     'https://www.facebook.com/share/1EBoTNqRCs/',
+  privacy:   '#',   // מדיניות פרטיות ותנאי שימוש
+  accessibility: '#',   // הצהרת נגישות
+};
+const VIDEO_URL = 'https://youtu.be/Y84tAoOr0x8';
+
+/* ---------- אייקונים ---------- */
+const Icon = {
+  instagram: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-full h-full"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+  ),
+  facebook: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99C18.34 21.13 22 16.99 22 12c0-5.52-4.48-10-10-10z"/></svg>
+  ),
+  tiktok: (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full"><path d="M16.6 2h-3.3v13.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9a6.3 6.3 0 1 0 5.3 6.2V8.6a8 8 0 0 0 4.4 1.3V6.6A4.5 4.5 0 0 1 16.6 2z"/></svg>
+  ),
+  x: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="w-full h-full"><path d="M3.5 3.5h4.6l12.4 17H15.9z"/><path d="M20.2 3.5l-7 7.8M10.6 13.8l-6.8 6.7"/></svg>
+  ),
+};
+
+/* ---------- חץ בכתב יד ---------- */
+/* חץ בסגנון ציור יד: קו רך בגרדיאנט סגול-ורוד, קו "סקיצה" עדין מאחוריו,
+   ראש חץ מעוגל ואנימציית ציור קצרה */
+function Arrow({ id, className = '', style, viewBox, d, head }) {
+  return (
+    <svg viewBox={viewBox} fill="none" className={'doodle ' + className} style={{ overflow: 'visible', ...style }} aria-hidden="true">
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#a855f7" />
+          <stop offset="100%" stopColor="#ec4899" />
+        </linearGradient>
+      </defs>
+      <path d={d} stroke={`url(#${id})`} strokeWidth="1.2" vectorEffect="non-scaling-stroke" opacity="0.35" transform="translate(1.2 0.9)" strokeLinecap="round" strokeLinejoin="round" />
+      <path className="doodle-line" d={d} stroke={`url(#${id})`} strokeWidth="2.7" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+      <path className="doodle-head" d={head} stroke={`url(#${id})`} strokeWidth="2.7" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+const Note = ({ className = '', style, children }) => (
+  <span dir="rtl" style={style} className={'font-hand text-rose-400 whitespace-nowrap text-[1.95rem] sm:text-[2.4rem] leading-[0.8] block z-10 ' + className}>{children}</span>
+);
+
+function SocialIcons() {
+  const items = [
+    ['instagram', 'אינסטגרם'], ['facebook', 'פייסבוק'], ['tiktok', 'טיקטוק'], ['x', 'X'],
+  ];
+  return (
+    <div className="flex justify-between text-grape-600" dir="ltr">
+      {items.map(([k, label]) => (
+        <a key={k} href={LINKS[k]} target="_blank" rel="noopener noreferrer" aria-label={label}
+           className="w-10 h-10 sm:w-12 sm:h-12 transition-transform hover:scale-110 hover:text-rose-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 rounded-lg">
+          {Icon[k]}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function LinkButton({ href, children }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer"
+       className="block w-full text-center rounded-2xl border-2 border-grape-600 bg-white/40 py-3 px-3 text-base sm:text-xl leading-snug text-grape-700 font-medium transition-all hover:bg-grape-600 hover:text-white hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+      {children}
+    </a>
+  );
+}
+
+/* רקע מודרני: בסיס בהיר עם "הילות" צבע רכות (משותף לשני העמודים) */
+function Aurora({ tall = false }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute -top-24 -right-16 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-grape-500/25 blur-3xl"></div>
+      <div className="absolute -top-10 -left-20 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-rose-400/20 blur-3xl"></div>
+      <div className="absolute top-24 left-1/3 w-56 h-56 rounded-full bg-cyan-300/15 blur-3xl"></div>
+      {tall && <>
+        <div className="absolute top-[45%] -right-24 w-80 h-80 rounded-full bg-rose-400/15 blur-3xl"></div>
+        <div className="absolute bottom-0 -left-16 w-80 h-80 rounded-full bg-grape-500/20 blur-3xl"></div>
+      </>}
+    </div>
+  );
+}
+
+/* ---------- אזור עליון: פרופיל וקישורים ----------
+   רשת של 3 עמודות: שוליים ימניים | תוכן | שוליים שמאליים
+   ההערות בכתב יד והחצים יושבים בשוליים ולא נחתכים */
+function Hero() {
+  return (
+    <section className="relative px-6 pt-8 pb-12 sm:px-10 sm:pt-12">
+      <Aurora tall />
+      <div className="relative mx-auto max-w-lg bg-white/80 backdrop-blur-sm ring-1 ring-white rounded-[2rem] shadow-[0_20px_50px_-20px_rgba(107,33,168,0.35)] pt-7 pb-10 sm:px-2">
+        <h1 className="sr-only">מאיה לי לוי – האתר הרשמי</h1>
+
+        <div className="grid grid-cols-[76px_1fr_76px] sm:grid-cols-[120px_1fr_120px]">
+          {/* --- שורת התמונה --- */}
+          {/* "היי הנה אני": הטקסט נכנס מעט אל צד התמונה, והחץ עולה ממנו ומסתלסל אל הפנים */}
+          <div className="col-start-1 row-start-1 relative z-10" dir="ltr">
+            <div className="absolute top-[11%] -left-[72px] w-[140px] h-[180px]">
+              <Arrow id="ga" className="absolute top-0 left-0 w-[100px]" viewBox="0 0 90 80"
+                d="M70 76 C 78 56, 74 40, 62 36 C 50 32, 46 48, 56 50 C 66 52, 64 30, 48 22 C 38 17, 24 18, 12 24"
+                head="M20 11 Q 15 19, 12 24 Q 19 25.5, 27 25.5" />
+              <Note className="absolute top-[78px] left-[100px] text-center" style={{ transform: 'translateX(-50%) rotate(-10deg)' }}>היי הנה<br/>אני</Note>
+            </div>
+          </div>
+          <div className="col-start-2 row-start-1">
+            <img src="portrait.webp" alt="מאיה לי לוי" className="w-full block" />
+          </div>
+
+          {/* "והנה אני ברשתות!": גבוה יותר וצמוד לתמונה, והחץ יורד ממנו אל אינסטגרם */}
+          <div className="col-start-3 row-start-1 row-span-2 relative z-10" dir="ltr">
+            <Note className="absolute bottom-[134px] sm:bottom-[138px] right-[25px] text-center" style={{ transform: 'translateX(50%) rotate(-10deg)' }}>והנה אני<br/>ברשתות!</Note>
+            <Arrow id="gb" className="absolute bottom-[16px] sm:bottom-[20px] right-[3px] w-[64px]" viewBox="0 0 80 120"
+              d="M30 4 C 22 26, 20 44, 30 54 C 40 64, 50 52, 40 46 C 28 40, 14 62, 18 82 C 22 100, 44 110, 72 110"
+              head="M60 101 Q 67 106, 72 110 Q 66 114, 59 119" />
+          </div>
+
+          {/* --- שורת האייקונים --- */}
+          <div className="col-start-2 row-start-2 pt-5 pb-1">
+            <SocialIcons />
+          </div>
+
+          {/* --- הערה + חץ אל הקישורים --- */}
+          <div className="col-start-1 row-start-2 row-span-2 pt-4 sm:pt-5 flex flex-col items-center">
+            <Note className="relative -top-2.5 -rotate-[8deg] text-center -ms-2">קישורים<br/>למיניהם</Note>
+            <Arrow id="gc" className="w-[50px] sm:w-[64px] -ms-2 mt-1 self-end" viewBox="0 0 60 90"
+              d="M44 4 C 52 20, 54 34, 46 44 C 38 54, 28 44, 36 38 C 46 30, 56 52, 48 68 C 40 80, 24 86, 8 86" head="M19 78 Q 13 82, 8 86 Q 14 89, 20 94" />
+          </div>
+          <div className="col-start-2 row-start-3 mt-8 space-y-4">
+            <LinkButton href={LINKS.calculator}>עזרו לי להיאבק על האמת מול גיא רופא <strong className="font-extrabold">שאינו רופא</strong></LinkButton>
+            <LinkButton href={LINKS.book}>הספר שלי</LinkButton>
+            <LinkButton href={LINKS.whatsapp}>ערוץ הוואטסאפ שלי</LinkButton>
+            <LinkButton href={LINKS.work}>להצעות שת״פים ועבודה</LinkButton>
+          </div>
+        </div>
+        <ScrollHint />
+      </div>
+    </section>
+  );
+}
+
+/* ---------- אזור מדיה ---------- */
+function Media() {
+  return (
+    <section className="px-4 pt-12 pb-4">
+      <div className="mx-auto max-w-2xl">
+        <h2 className="font-hand text-grape-600 text-[2.9rem] sm:text-[3.8rem] leading-[0.85] text-center mb-6">הכתבה הראשונה עליי</h2>
+        <a href={VIDEO_URL} target="_blank" rel="noopener noreferrer"
+           className="group block relative overflow-hidden rounded-2xl shadow-lg shadow-purple-900/15 ring-1 ring-grape-300/50">
+          <img src="video.jpg" alt="כאן חדשות – הנערה שהפכה לכוכבת אינסטגרם" className="w-full block transition-transform duration-300 group-hover:scale-[1.02]" />
+          <span className="absolute inset-0 bg-grape-800/0 group-hover:bg-grape-800/10 transition-colors"></span>
+        </a>
+        <p className="text-center text-sm text-cocoa/70 mt-3">כאן | חדשות · לחצו לצפייה ביוטיוב</p>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- שאלות ותשובות ---------- */
+function QA({ q, children }) {
+  return (
+    <article className="mb-12">
+      <h3 className="font-hand text-rose-400 text-[2.8rem] sm:text-[3.6rem] leading-[0.85] mb-4">{q}</h3>
+      <div className="text-[1.2rem] sm:text-[1.3rem] leading-[1.45] text-cocoa space-y-1">{children}</div>
+    </article>
+  );
+}
+
+function TweetCard() {
+  return (
+    <a href={LINKS.tweet} target="_blank" rel="noopener noreferrer"
+       className="group relative block !mt-9 !mb-7 border-2 border-grape-600 bg-white p-3 sm:p-4 transition-shadow hover:shadow-xl hover:shadow-purple-900/10">
+      <img src="tweet.jpg" alt="ציוץ של מאיה לי: אין דבר כזה לעודד השמנה. לעודד רזון אגב, זו כן תופעה – מערכתית ומקיפה. אני אמות על הגבעה הזו בכבוד." className="w-full block" />
+      <span className="absolute top-[6%] left-[4%] bg-grape-600 text-white text-xs sm:text-base px-3 py-2 sm:px-4 transition-colors group-hover:bg-rose-400">לחצו על התמונה לפוסט המלא</span>
+    </a>
+  );
+}
+
+function FAQ() {
+  return (
+    <section className="px-5 pt-4 pb-6">
+      <div className="mx-auto max-w-2xl">
+        <h2 className="font-hand text-grape-600 text-[2.9rem] sm:text-[3.8rem] leading-[0.85] mb-7 flex items-center justify-center gap-2 sm:gap-3">
+          <span className="title-glitch block shrink-0 text-[2.9em] leading-[0.6] -translate-y-[0.2em] -rotate-[6deg]" style={{ textShadow: '-5px 4px 0 #67e8f9, 5px -3px 0 #ec4899' }} aria-hidden="true">3</span>
+          <span className="sr-only">3</span>
+          <span className="text-center">תשובות קצרות לשאלות נפוצות</span>
+        </h2>
+
+        <QA q="למה את מעודדת השמנה?">
+          <p className="font-extrabold">אני לא.</p>
+          <p className="font-extrabold">אין דבר כזה ״לעודד השמנה״.</p>
+          <p>זה ביטוי ריק מתוכן שנועד להשתיק אנשים שמנים שמתקיימים להם במרחב הציבורי מבלי להתנצל. כשאני מעלה תוכן, אני לא קוראת לאף אחד לעלות במשקל. אלא אומרת דבר פשוט – גם לאנשים שמנים מגיע לאהוב את עצמם, להתקיים בכבוד ולקבל יחס שוויוני.</p>
+          <p>השמנת יתר היא לא בריאה ואף מסוכנת, ויש לה השלכות רבות על הבריאות הנפשית והפיזית. המסרים שלי מאז ומתמיד היו פשוטים – <strong className="font-extrabold">רק מתוך כבוד, קבלה, חמלה ואהבה עצמית – אפשר לדאוג באמת לבריאות. שנאה, ביוש והשתקה מעולם לא הפכו אף אחד לבריא יותר.</strong></p>
+          <TweetCard />
+          <p className="font-hand text-grape-600 text-[2rem] sm:text-[2.5rem] leading-[0.85] pt-4">*יש לי הייליט שלם באינסטגרם ובטיקטוק שמוקדש לתופעה. בואו</p>
+        </QA>
+
+        <QA q="למה את שונאת גברים?">
+          <p className="font-extrabold">אני לא.</p>
+          <p><strong className="font-extrabold">אני ממש לא שונאת גברים.</strong> אני שונאת פוגעים מינית, אנשים חשוכים ושוביניסטים מיזוגניים – יוצא שרובם גברים, אבל זה לא מעיד על הכלל.</p>
+          <p>יש לי בן זוג שאני אוהבת, אבא שחשוב לי מאוד, חברים, ואנשים מדהימים בחיים שלי. אני נאבקת נגד אפליה ואלימות – לא נגד גברים. לתייג אותי כ״שונאת גברים״ כי אני פמיניסטית זו הדרך הכי קלה להתחמק מהנושאים הקשים שאני מעלה – כמו אלימות נגד נשים, פערי שכר ופגיעות מיניות. המאבק שלי הוא על שוויון, <strong className="font-extrabold">והפטריארכיה פוגעת בכולם – גם בגברים.</strong> הציפיות החברתיות, האיסור להראות פגיעות והלחץ להתאים לתבניות נוקשות פוגעים בגברים לא פחות. הפמיניזם שאני מאמינה בו רוצה לשחרר את כולנו מהתבניות האלה.</p>
+          <p><strong className="font-extrabold">גברים הם שותפים מלאים לדרך – המאבק לשוויון הוא לא ״נשים נגד גברים״</strong> יש סביבי המון גברים שמבינים ששוויון מגדרי הוא האינטרס של כולנו ונלחמים איתנו כתף אל כתף.</p>
+        </QA>
+
+        <QA q="את חולת נפש?">
+          <p><strong className="font-extrabold">כן. אני מתמודדת נפש,</strong> מאובחנת מגיל מוקדם, נמצאת בטיפול פסיכיאטרי וגאה לשתף על זה פתוח – וזה ממש לא כינוי גנאי מבחינתי.</p>
+          <p>יש שמנסים להשתמש בביטוי ״חולת נפש״ כדי להקטין אותי, לבטל את מה שיש לי לומר או לגרום לי להתבייש. <strong className="font-extrabold">מבחינתי, אין שום דבר מביש בלהתמודד עם מחלה נפשית,</strong> בדיוק כמו שאין בושה בהתמודדות עם כל מצב רפואי אחר. <strong className="font-extrabold">חשוב לי לדבר על בריאות הנפש ברשת בדיוק בשביל לשבור את הסטיגמה.</strong> ככל שנדבר על הנושא בצורה גלויה, פתוחה ולא מסתגרת, ככה נוריד את מפלס הבושה עבור כל ילד/ה או אדם שמפחדים לבקש עזרה. <strong className="font-extrabold">התמודדות נפשית לא מורידה מהערך שלי</strong> – אפשר להיות מתמודדת נפש ועדיין להיות אישה חזקה, מובילה, משפיעה, יוצרת, אוהבת ונאהבת.</p>
+        </QA>
+
+      </div>
+    </section>
+  );
+}
+
+function Signature() {
+  return (
+    <div>
+      {/* החתימה מעל "אוהבת, מאיה לי", במרווח קטן */}
+      <div className="text-center px-5 pt-4">
+        <img src="signature.png" alt="חתימה של מאיה לי" className="block mx-auto w-[170px] sm:w-[210px] mb-3" />
+        <p className="font-hand text-cocoa text-[3rem] sm:text-[3.8rem] leading-[0.9]">אוהבת, מאיה לי</p>
+      </div>
+      {/* תמונה קטנה וסמלית, צמודה לשוליים הימניים */}
+      <div className="flex justify-start items-center gap-3 sm:gap-6 mt-6 max-w-2xl me-auto">
+        <img src="full2.webp" alt="מאיה לי לוי" className="block w-[36%] max-w-[190px] shrink-0 self-end" />
+        {/* הערת הקדשה */}
+        <a href="https://www.ot-hayim.co.il/fonts/yael-leibushor/" target="_blank" rel="noopener noreferrer" className="block transition-colors hover:text-grape-700 flex-1 max-w-[340px] ps-1 pe-5 sm:pe-8 pb-10 text-[0.7rem] sm:text-[0.85rem] leading-[1.4] text-cocoa/80">
+          הכותרות באתר זה מעוצבות בפונט <strong className="font-bold text-cocoa whitespace-nowrap">יעל לייבושור</strong> מתוך <strong className="font-bold text-cocoa whitespace-nowrap">מיזם ״אות.חיים״</strong>. מוקדש באהבה ובהערכה לזכרה של סמל יעל לייבושור ז״ל, תצפיתנית גיבורה שנפלה בקרב על מוצב נחל עוז כשעשתה את תפקידה <strong className="font-bold text-cocoa">עד הרגע האחרון</strong>. יעל הייתה אוהבת אדם, נושמת מדבר ורוקמת חברויות. ילדת טבע שמילאה את סביבתה בשמחה, והשאירה אחריה מורשת של אומץ, עדינות וחכמת הלב.
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* רמז גלילה: "תווית" שיושבת על הקצה התחתון של הכרטיסייה ומצביעה להמשך */
+function ScrollHint() {
+  const go = () => {
+    const el = document.getElementById('more');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return (
+    <button type="button" onClick={go} aria-label="גללו להמשך העמוד"
+      className="absolute z-20 left-1/2 -translate-x-1/2 -bottom-5 flex items-center gap-2 whitespace-nowrap rounded-full bg-white ring-1 ring-grape-100 shadow-lg shadow-purple-900/15 pr-4 pl-1.5 py-1.5 text-grape-700 text-[0.95rem] font-medium hover:shadow-xl transition-shadow">
+      יש עוד למטה
+      <span className="hint-bounce flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-grape-500 to-rose-400 text-white">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M6 9.5l6 6 6-6" /></svg>
+      </span>
+    </button>
+  );
+}
+
+function HomePage() {
+  return (
+    <div className="fade-in">
+      <Hero />
+      <div className="page-bg" id="more">
+        <Media />
+        <FAQ />
+        <Signature />
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   "מחשבות על" – פיד פוסטים עם חיפוש וסינון
+   הנתונים נקראים מהקובץ posts.json (לצד האתר).
+   אם הקובץ לא נטען – משתמשים בעותק המובנה למטה.
+   ============================================================ */
+const FALLBACK_POSTS = {
+  "updated": "2026-11-16",
+  "tags": [
+    "פמיניזם",
+    "פוליטיקה כללית",
+    "שמנופוביה",
+    "בריאות הנפש",
+    "אלימות נגד נשים",
+    "מאבקים חברתיים",
+    "נשים ופוליטיקה",
+    "דימוי גוף חיובי",
+    "הפרעות אכילה",
+    "״לא סיפור כבד״ - הספר שלי",
+    "סושיאל ויצירת תוכן",
+    "חיים אישיים ומשפחה",
+    "הומור ומחשבות",
+    "אחר"
+  ],
+  "posts": [
+    {
+      "id": "p1",
+      "date": "2026-10-28",
+      "text": "[פוסט לדוגמה]\nתזכורת קטנה לכל מי שצריכה אותה היום: הגוף שלך הוא לא פרויקט שצריך לתקן. הוא הבית שלך. מותר לך להתלבש יפה, לצאת לים ולהצטלם בלי לחכות ל\"גרסה הבאה\" של עצמך.",
+      "tags": [
+        "דימוי גוף חיובי"
+      ],
+      "URL": "https://www.facebook.com/"
+    },
+    {
+      "id": "p2",
+      "date": "2026-09-14",
+      "text": "[פוסט לדוגמה – ארוך, כדי להדגים את הקיצור]\nהיום בטיפול דיברנו על זה שמותר לבקש עזרה גם כשנדמה ש\"זה לא מספיק נורא\". אין סף מינימלי לכאב. אם אתן מתלבטות – זה בדיוק הזמן לפנות.\nהרבה פעמים אנחנו מחכות שהמצב יידרדר, כאילו צריך להרוויח את הזכות לקבל תמיכה. אבל ככה זה לא עובד. אף אחת לא מחכה ששבר ביד יהפוך לשבר פתוח כדי ללכת לרופא.\nאז אם משהו מרגיש לכן כבד – תדברו. עם חברה, עם המשפחה, עם איש או אשת מקצוע. זה לא חולשה, זה בדיוק ההפך.\nואני מבטיחה לכן: הרגע שבו מבקשים עזרה הוא לא סוף הסיפור. הוא הרגע שבו מתחילים לכתוב פרק חדש.",
+      "tags": [
+        "בריאות הנפש"
+      ],
+      "URL": "https://www.facebook.com/"
+    },
+    {
+      "id": "p3",
+      "date": "2026-08-02",
+      "text": "[פוסט לדוגמה]\nפמיניזם זה לא \"נשים נגד גברים\". זה כולנו נגד תבניות שמכאיבות לכולנו. ובינתיים, עדכון חשוב מהספר: סיימתי את הפרק השלישי, והוא מצחיק אותי יותר ממה שנעים לי להודות 😅",
+      "tags": [
+        "פמיניזם",
+        "״לא סיפור כבד״ - הספר שלי",
+        "הומור ומחשבות"
+      ],
+      "URL": "https://www.facebook.com/"
+    }
+  ]
+};
+
+function usePosts() {
+  const [data, setData] = useState(FALLBACK_POSTS);
+  useEffect(() => {
+    let alive = true;
+    fetch('posts.json', { cache: 'no-store' })
+      .then(r => (r.ok ? r.json() : Promise.reject()))
+      .then(j => { if (alive && j && Array.isArray(j.posts)) setData({ updated: j.updated || FALLBACK_POSTS.updated, tags: j.tags || FALLBACK_POSTS.tags, posts: j.posts }); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+  return data;
+}
+
+const normalize = (str) => (str || '')
+  .replace(/[֑-ׇ]/g, '')          // ניקוד וטעמים
+  .replace(/[״"׳']/g, '')
+  .toLowerCase();
+
+function formatDate(iso) {
+  try {
+    return new Date(iso + 'T12:00:00').toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
+  } catch (e) { return iso; }
+}
+
+/* הדגשת מילות החיפוש בתוך הטקסט */
+function Highlight({ text, query }) {
+  const q = query.trim();
+  if (!q) return text;
+  const words = q.split(/\s+/).filter(Boolean).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  if (!words.length) return text;
+  const re = new RegExp('(' + words.join('|') + ')', 'gi');
+  return text.split(re).map((part, i) =>
+    i % 2 === 1
+      ? <mark key={i} className="bg-rose-400/25 text-cocoa rounded px-0.5">{part}</mark>
+      : <React.Fragment key={i}>{part}</React.Fragment>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="w-6 h-6" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" />
+    </svg>
+  );
+}
+
+function Chip({ active, onClick, children }) {
+  return (
+    <button type="button" onClick={onClick} aria-pressed={active}
+      className={'shrink-0 snap-start whitespace-nowrap rounded-full px-3.5 py-1.5 text-[0.92rem] font-medium border transition-all ' +
+        (active
+          ? 'bg-gradient-to-l from-grape-600 to-rose-400 text-white border-transparent shadow-md shadow-purple-900/15'
+          : 'bg-white text-grape-700 border-grape-300/80 shadow-sm hover:border-grape-600')}>
+      {children}
+    </button>
+  );
+}
+
+function CrownIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0" aria-hidden="true">
+      <path d="M3 8.2l4.6 3.6L12 5l4.4 6.8L21 8.2l-1.8 10.3H4.8L3 8.2z" />
+      <rect x="4.8" y="19.6" width="14.4" height="2" rx="1" />
+    </svg>
+  );
+}
+
+/* בועת "מקלידה..." עם שלוש נקודות מונפשות */
+function TypingDots() {
+  return (
+    <span className="typing inline-flex items-center gap-[5px] bg-white rounded-full rounded-bl-md px-3 py-2.5 shadow-md shadow-purple-900/10 ring-1 ring-grape-100" aria-hidden="true">
+      <i></i><i></i><i></i>
+    </span>
+  );
+}
+
+/* שורת תגיות נגללת: דהייה בקצה + חץ שמראה שיש עוד */
+function ChipsRow({ children }) {
+  const ref = React.useRef(null);
+  const [atEnd, setAtEnd] = useState(false);
+  const [atStart, setAtStart] = useState(true);
+  const check = () => {
+    const el = ref.current; if (!el) return;
+    const x = Math.abs(el.scrollLeft);
+    setAtStart(x < 4);
+    setAtEnd(x + el.clientWidth >= el.scrollWidth - 4);
+  };
+  useEffect(() => { check(); window.addEventListener('resize', check); return () => window.removeEventListener('resize', check); }, []);
+  const nudge = (dir) => { const el = ref.current; if (el) el.scrollBy({ left: dir * 180, behavior: 'smooth' }); };
+  return (
+    <div className="relative">
+      <div ref={ref} onScroll={check}
+        className="flex gap-2 overflow-x-auto overscroll-x-contain snap-x scroll-px-5 px-5 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {children}
+        <span className="shrink-0 w-6" aria-hidden="true"></span>
+      </div>
+      {/* דהייה + חץ בצד שמאל (המשך הרשימה) */}
+      <div className={'pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#f7f0fc] via-[#f7f0fc]/80 to-transparent transition-opacity ' + (atEnd ? 'opacity-0' : 'opacity-100')}></div>
+      <button type="button" onClick={() => nudge(-1)} aria-label="עוד תגיות"
+        className={'absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-md ring-1 ring-grape-100 text-grape-600 flex items-center justify-center transition-opacity ' + (atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 chip-nudge')}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M14.5 6l-6 6 6 6" /></svg>
+      </button>
+      {/* דהייה בצד ימין אחרי שגוללים */}
+      <div className={'pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#f7f0fc] to-transparent transition-opacity ' + (atStart ? 'opacity-0' : 'opacity-100')}></div>
+    </div>
+  );
+}
+
+function PostCard({ post, query, activeTags, onTag }) {
+  return (
+    <article className="bg-white rounded-3xl shadow-[0_6px_24px_-8px_rgba(107,33,168,0.18)] ring-1 ring-grape-100 p-5 sm:p-6">
+      <time dateTime={post.date} className="block text-sm font-medium text-grape-600/80 mb-3">{formatDate(post.date)}</time>
+      {/* תצוגה מקדימה: עד 6 שורות, הקריאה המלאה בפייסבוק */}
+      <p className="text-[1.12rem] sm:text-[1.2rem] leading-[1.45] text-cocoa whitespace-pre-line line-clamp-6">
+        <Highlight text={post.text} query={query} />
+      </p>
+      {post.URL && (
+        <a href={post.URL} target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 mt-3 text-[0.98rem] font-bold text-grape-600 hover:text-grape-800 underline-offset-4 hover:underline transition-colors">
+          <span className="whitespace-nowrap">להמשך הקריאה (בפייסבוק&nbsp;🍿)</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 shrink-0 transition-transform group-hover:-translate-x-0.5" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" /></svg>
+        </a>
+      )}
+      {post.tags && post.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-grape-100">
+          {post.tags.map(t => (
+            <button key={t} type="button" onClick={() => onTag(t)}
+              className={'inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1 transition-colors ' +
+                (activeTags.includes(t) ? 'bg-grape-600 text-white' : 'bg-grape-100/80 text-grape-700 hover:bg-grape-300/60')}>
+              <CrownIcon />{t}
+            </button>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+/* מונה תוצאות שמנוסח לפי מה שהמשתמש עושה */
+function ResultsCount({ count, tags, query }) {
+  const B = ({ children }) => <span className="font-bold text-grape-700">{children}</span>;
+  if (!tags.length && !query) {
+    return count === 1 ? <>מציג את הפוסט היחיד</> : <>מציג את כל <B>{count}</B> הפוסטים</>;
+  }
+  const lead = count === 0 ? <>לא נמצאו פוסטים</>
+    : count === 1 ? <>נמצא <B>פוסט אחד</B></>
+    : <>נמצאו <B>{count}</B> פוסטים</>;
+  const multiWord = query.split(/\s+/).length > 1;
+  return (
+    <>
+      {lead}
+      {tags.length > 0 && <> תחת <B>{tags.join(' + ')}</B></>}
+      {query && <> {count === 1 ? 'המכיל' : 'המכילים'} את {multiWord ? 'המילים' : 'המילה'} <B>'{query}'</B></>}
+    </>
+  );
+}
+
+function ArchivePage() {
+  const { tags, posts, updated } = usePosts();
+  const [query, setQuery] = useState('');
+  const [activeTags, setActiveTags] = useState([]);
+
+  const results = React.useMemo(() => {
+    const words = normalize(query).split(/\s+/).filter(Boolean);
+    return [...posts]
+      .sort((a, b) => (a.date < b.date ? 1 : -1))
+      .filter(p => activeTags.every(t => (p.tags || []).includes(t)))
+      .filter(p => {
+        if (!words.length) return true;
+        const hay = normalize(p.text + ' ' + (p.tags || []).join(' '));
+        return words.every(w => hay.includes(w));
+      });
+  }, [posts, query, activeTags]);
+
+  const toggleTag = (t) => setActiveTags(cur => (cur.includes(t) ? cur.filter(x => x !== t) : [...cur, t]));
+  const filtering = query.trim() || activeTags.length > 0;
+
+  return (
+    <div className="fade-in page-bg min-h-[80vh] pb-2">
+      {/* כותרת בסגנון מודרני: רקע בהיר עם "הילות" צבע רכות */}
+      <div className="relative overflow-hidden px-5 pt-10 pb-6 sm:pt-14">
+        <Aurora />
+
+        <div className="relative mx-auto max-w-2xl text-center">
+          <div className="inline-flex items-end gap-2">
+            <h2 className="title-glitch font-hand text-[3rem] sm:text-[4.2rem] leading-[0.9]">ארכיון הדעות הגדול!</h2>
+            <span className="mb-3 sm:mb-5 shrink-0"><TypingDots /></span>
+          </div>
+          <p className="mt-3 text-[1.1rem] sm:text-[1.25rem] text-cocoa/75">תמיד יש לי דעה, כמעט תמיד היא מופיעה פה</p>
+
+          {/* חיפוש */}
+          <div className="relative mt-6 text-right">
+            <span className="absolute z-10 inset-y-0 right-4 flex items-center text-grape-600 pointer-events-none"><SearchIcon /></span>
+            <input type="search" value={query} onChange={e => setQuery(e.target.value)}
+              placeholder="חפשו פוסטים שלי או נושאים מעניינים" aria-label="חיפוש בפוסטים"
+              className={(query ? 'pl-12 ' : 'pl-3 ') + "w-full rounded-2xl bg-white border border-grape-100 focus:border-grape-500 focus:ring-4 focus:ring-grape-500/15 outline-none shadow-[0_8px_30px_-10px_rgba(107,33,168,0.25)] py-3.5 pr-[3.2rem] text-base sm:text-lg placeholder:text-[0.95rem] sm:placeholder:text-lg text-cocoa placeholder:text-grape-600/45 transition [&::-webkit-search-cancel-button]:hidden"} />
+            {query && (
+              <button type="button" onClick={() => setQuery('')} aria-label="ניקוי החיפוש"
+                className="absolute z-10 inset-y-0 left-3 my-auto w-8 h-8 rounded-full text-grape-600 hover:bg-grape-100 flex items-center justify-center text-xl leading-none">×</button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-2xl">
+        {/* תגיות – שורה אופקית נגללת */}
+        <ChipsRow>
+          <Chip active={activeTags.length === 0} onClick={() => setActiveTags([])}>הכל</Chip>
+          {tags.map(t => <Chip key={t} active={activeTags.includes(t)} onClick={() => toggleTag(t)}>{t}</Chip>)}
+        </ChipsRow>
+
+        <div className="px-5">
+          <p className="text-sm text-cocoa/60 mb-4 mt-1" aria-live="polite">
+            <ResultsCount count={results.length} tags={activeTags} query={query.trim()} />
+          </p>
+          <p className="text-xs text-cocoa/45 -mt-3 mb-5">מעודכן נכון ל־{formatDate(updated || new Date().toISOString().slice(0, 10))}</p>
+
+          <div className="space-y-5">
+            {results.map(p => (
+              <PostCard key={p.id} post={p} query={query} activeTags={activeTags} onTag={toggleTag} />
+            ))}
+          </div>
+
+          {results.length === 0 && (
+            <div className="text-center bg-white/70 rounded-3xl border-2 border-dashed border-grape-300 p-10 mt-2">
+              <p className="font-hand text-rose-400 text-[2.4rem] leading-[0.9] mb-3">תפסת אותי בלי מילים</p>
+              <p className="text-cocoa/70 mb-5">מסתבר שעל זה ספציפית <strong className="font-bold text-cocoa">עוד לא</strong> חפרתי (או שפשוט כדאי לנסות מילת חיפוש אחרת).</p>
+              <button type="button" onClick={() => { setQuery(''); setActiveTags([]); }}
+                className="rounded-full border-2 border-grape-600 text-grape-700 px-5 py-2 font-medium hover:bg-grape-600 hover:text-white transition-colors">
+                הצגת כל הפוסטים
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   "המוזיאון 🖼️" – גלריית טוקבקים בסגנון תערוכת פרימיום
+   כדי להחליף יצירה: מעלים צילום מסך ומשנים את image לשם הקובץ.
+   ============================================================ */
+
+/* תמונת מקום אפורה (מוטמעת בדף, כי תמונות מאתרים חיצוניים חסומות כאן) */
+function placeholderArt(w, h, label) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <rect width="100%" height="100%" fill="#d4d4d8"/>
+    <rect x="24" y="24" width="${w - 48}" height="${h - 48}" fill="none" stroke="#a1a1aa" stroke-width="3" stroke-dasharray="14 10"/>
+    <text x="50%" y="47%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w / 14)}" fill="#71717a">${label}</text>
+    <text x="50%" y="56%" text-anchor="middle" font-family="Arial, sans-serif" font-size="${Math.round(w / 22)}" fill="#a1a1aa">${w} × ${h}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+const EXHIBITS = [
+  {
+    id: 'm1',
+    title: 'רק אלוהים יודע',
+    year: 2026,
+    medium: 'אנונימי 402, על רקע פייסבוק',
+    curator: 'קומפוזיציה אבסורדית הבוחנת את גבולות הפתטיות והעליבות. פטלוב.',
+    // שחזור של התגובה כטקסט (במקום צילום מסך רחב), כדי שתהיה קריאה בכל מסך
+    comment: {
+      author: 'משתתף אנונימי 402',
+      time: 'שעה אחת',
+      avatar: 'anon',
+      text: 'תכסי את עצמך בתמונת פרופיל\nאת אונסת אותי לראות בכח מחלבות תנובה נפולות וענקיות וזה לא בסדר\nאבל להתלונן ולהעלות פוסטי תשומי על מישהו ששולח לך דיק פיק ( ורק אלוהים יודע למה הוא החליט לשלוח דווקא לך )  בלי רצונך זה כן ?\nצבועה חולת תשומי ולייקים של זרים ברשת',
+    },
+    image: 'art1.jpg',   // צילום המסך המקורי (נשמר לגיבוי)
+  },
+  {
+    id: 'm2',
+    title: 'מאיה לי לא מאיה',
+    year: 2025,
+    medium: 'סוריאליזם אלים, שירה מודרנית בהודעות פרטיות',
+    curator: 'דיאלוג מרתק בין פואטיקה גברית של ביוב (המשלבת מוטיבים קולינריים של חריימה ורפרנסים ממארוול) לבין פיהוק וירטואלי',
+    // שחזור של שיחת ההודעות כטקסט, כדי שתהיה קריאה בכל מסך
+    chat: [
+      { from: 'them', text: 'יבהמה ישרמוטה' },
+      { from: 'them', text: 'מאיה יש מצב להכניס לך חרמייה לתוך החור תחת שלך ולעשות שם אנל 🤤' },
+      { from: 'me', text: 'מאיה לי לא מאיה' },
+      { from: 'them', text: 'אם את מגישה תלונה את יכולה להיות העורכת דין שלי גם ככה את יושבת על השופט ואז קוראים עליו קדיש יבהמה ישמנה לכי שימי חרא בתוך דילדו ותתחפי לישבן 😉' },
+      { from: 'me', text: 'קיצר עוד משהו?' },
+      { time: 'Today 11:07 PM' },
+      { from: 'them', text: 'אפילו אם תהיה במחנות השמדה לא תורידי במשקל יש לך סנטר כפול כמו של תאנוס יבהמה מחנה השמדה הוקם בגללך ישמנה תדחפי פומפה לתחת 😍' },
+    ],
+    image: 'art2.jpg',   // צילום המסך המקורי (נשמר לגיבוי)
+  },
+  {
+    id: 'm3',
+    title: 'תסביך שווארמה',
+    year: 2025,
+    medium: 'אקספרסיוניזם של ילד בטיקטוק',
+    curator: 'פרדוקס טראגי. בעודו מנסה לאתגר את המוזה לתבוע אותו משפטית, היוצר מתבלבל באותיות ומבקש ממנה, למעשה, להטביע אותו.',
+    chat: [
+      { time: 'Today 3:29 PM' },
+      { from: 'them', text: 'כוס אמא שלך תעשי סרטון על זה ישמנה כן כן תטבעי גם אותי שונא אותך ימוזרה בטח את אומרת שאת צמחונית בסרטונים יגלגל שווארמה ימשאית הובלות מטומטת' },
+    ],
+    image: 'art3.jpg',   // צילום המסך המקורי (נשמר לגיבוי)
+  },
+  {
+    id: 'm4',
+    title: 'תסביך החמור והבקבוק',
+    year: 2026,
+    medium: 'מזוכיזם ביוב מוקלד בצבעי טוויטר',
+    curator: 'קומפוזיציה טראגית. האמן מנסה להעליב אישה זרה, אך בפועל רק מספק לרשת כולה הצצה מטרידה אל הרגלי האוננות מסכני-החיים שלו. התבוננות ביצירה מחייבת חיסון טטנוס בתוקף.',
+    // שחזור של הציוץ כטקסט, כדי שיהיה קריא בכל מסך
+    xpost: {
+      name: 'Hepe Ra',
+      handle: '@hepe_ra16440',
+      time: "2 דק'",
+      replyTo: '@im_mayalee',
+      text: 'הצצתי בתמונתך.\nתשמעי - יש לגבר כל סיבה לאונן עם בקבוק שבור ולא לזיין אותך יא שבורה שמנה ומגעילה\nדפוקה בשכל...\nאבל כנראה אוהבת להזדיין\nמתי הדונקי שואו מתחיל?',
+      replies: 1, views: 3,
+    },
+    image: 'art4.jpg',   // צילום המסך המקורי (נשמר לגיבוי)
+  },
+];
+
+/* אבק כוכבים: נקודות זהב קטנות שמנצנצות בהשהיות שונות (מיקומים קבועים) */
+function Sparkles({ count = 46 }) {
+  const dots = React.useMemo(() => {
+    let seed = 7;
+    const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    return Array.from({ length: count }, (_, i) => ({
+      top: rnd() * 100, left: rnd() * 100,
+      size: 1.5 + rnd() * 3.5,
+      delay: rnd() * 6, dur: 2.5 + rnd() * 4,
+      star: i % 7 === 0,
+    }));
+  }, [count]);
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {dots.map((d, i) => d.star ? (
+        <svg key={i} viewBox="0 0 24 24" className="sparkle absolute text-amber-200"
+          style={{ top: d.top + '%', left: d.left + '%', width: d.size * 4, height: d.size * 4, animationDelay: d.delay + 's', animationDuration: d.dur + 's' }}>
+          <path fill="currentColor" d="M12 0c.6 5.6 1.9 8.6 3.6 9.9 1.6 1.2 4.4 1.8 8.4 2.1-4 .3-6.8.9-8.4 2.1C13.9 15.4 12.6 18.4 12 24c-.6-5.6-1.9-8.6-3.6-9.9C6.8 12.9 4 12.3 0 12c4-.3 6.8-.9 8.4-2.1C10.1 8.6 11.4 5.6 12 0z" />
+        </svg>
+      ) : (
+        <span key={i} className="sparkle absolute rounded-full bg-amber-200"
+          style={{ top: d.top + '%', left: d.left + '%', width: d.size, height: d.size, animationDelay: d.delay + 's', animationDuration: d.dur + 's', boxShadow: `0 0 ${d.size * 3}px rgba(253,224,71,.8)` }} />
+      ))}
+    </div>
+  );
+}
+
+/* שחזור תגובת פייסבוק כטקסט קריא */
+function AnonAvatar() {
+  return (
+    <span className="shrink-0 w-8 h-8 rounded-full bg-[#5fa02b] flex items-center justify-center" aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#fff">
+        <path d="M7.5 5.2c.3-1 1.2-1.6 2.2-1.4l2.3.5 2.3-.5c1-.2 1.9.4 2.2 1.4l1.1 4H6.4z" />
+        <rect x="3" y="9.6" width="18" height="1.8" rx=".9" />
+        <circle cx="8" cy="15.2" r="2.6" fill="none" stroke="#fff" strokeWidth="1.8" />
+        <circle cx="16" cy="15.2" r="2.6" fill="none" stroke="#fff" strokeWidth="1.8" />
+        <path d="M10.6 15.2c.9-.6 1.9-.6 2.8 0" fill="none" stroke="#fff" strokeWidth="1.6" />
+      </svg>
+    </span>
+  );
+}
+
+function CommentCard({ c, big = false }) {
+  return (
+    <div dir="rtl" className={'text-right bg-white ' + (big ? 'p-5 rounded-lg' : 'p-2.5 pb-7')}
+      style={{ fontFamily: '-apple-system, "Segoe UI", Helvetica, Arial, "Noto Sans Hebrew", sans-serif' }}>
+      <div className="flex items-start gap-2">
+        <AnonAvatar />
+        <div className="min-w-0">
+          <p className={'leading-tight ' + (big ? 'text-[1rem]' : 'text-[0.74rem]')}>
+            <span className="font-bold text-[#050505]">{c.author}</span>
+            <span className="text-[#65676b]"> · {c.time}</span>
+          </p>
+          <p className={'mt-1 text-[#050505] whitespace-pre-line leading-[1.32] ' + (big ? 'text-[1.12rem]' : 'text-[0.78rem]')}>{c.text}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* שחזור שיחת הודעות פרטיות כטקסט קריא */
+function ChatCard({ chat, big = false }) {
+  const fs = big ? 'text-[1rem]' : 'text-[0.76rem]';
+  return (
+    <div className={'bg-[#f2f2f4] flex flex-col gap-1.5 ' + (big ? 'p-4 rounded-lg' : 'p-2.5 pb-7')} dir="ltr"
+      style={{ fontFamily: '-apple-system, "Segoe UI", Helvetica, Arial, "Noto Sans Hebrew", sans-serif' }}>
+      {chat.map((m, i) => m.time ? (
+        <p key={i} className={'text-center text-[#8e8e93] my-1 ' + (big ? 'text-[0.85rem]' : 'text-[0.62rem]')}>{m.time}</p>
+      ) : m.from === 'me' ? (
+        <div key={i} className="flex justify-end">
+          <p dir="rtl" className={'max-w-[80%] rounded-2xl rounded-br-md bg-[#4fb0d6] text-white px-2.5 py-1.5 leading-[1.3] text-right ' + fs}>{m.text}</p>
+        </div>
+      ) : (
+        <div key={i} className="flex items-end gap-1.5">
+          <span className={'shrink-0 rounded-full bg-gradient-to-br from-zinc-500 to-zinc-900 ring-1 ring-black/10 ' + (big ? 'w-7 h-7' : 'w-5 h-5')} aria-hidden="true"></span>
+          <p dir="rtl" className={'max-w-[80%] rounded-2xl rounded-bl-md bg-white text-[#111] px-2.5 py-1.5 leading-[1.3] text-right shadow-[0_1px_1px_rgba(0,0,0,0.04)] ' + fs}>{m.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* שחזור ציוץ מ־X כטקסט קריא */
+function XPostCard({ x, big = false }) {
+  const t = big ? 'text-[1.05rem]' : 'text-[0.78rem]';
+  const sm = big ? 'text-[0.9rem]' : 'text-[0.68rem]';
+  const ic = big ? 'w-5 h-5' : 'w-3.5 h-3.5';
+  return (
+    <div dir="rtl" className={'text-right bg-white ' + (big ? 'p-5 rounded-lg' : 'p-2.5 pb-7')}
+      style={{ fontFamily: '-apple-system, "Segoe UI", Helvetica, Arial, "Noto Sans Hebrew", sans-serif' }}>
+      <div className="flex items-start gap-2">
+        <span className={'shrink-0 rounded-full bg-gradient-to-br from-amber-200 to-amber-400 ring-1 ring-black/5 ' + (big ? 'w-11 h-11' : 'w-8 h-8')} aria-hidden="true"></span>
+        <div className="min-w-0 flex-1">
+          <p className={'leading-tight ' + sm}>
+            <span className={'font-bold text-[#0f1419] ' + t}>{x.name}</span>{' '}
+            <span className="text-[#536471]" dir="ltr">{x.handle}</span>
+            <span className="text-[#536471]"> · {x.time}</span>
+          </p>
+          <p className={'text-[#536471] mt-0.5 ' + sm}>בתשובה ל-<span className="text-[#1d9bf0]" dir="ltr">{x.replyTo}</span></p>
+          <p className={'mt-1.5 text-[#0f1419] whitespace-pre-line leading-[1.35] ' + t}>{x.text}</p>
+          <div className={'mt-2 flex items-center justify-between text-[#536471] ' + sm} dir="ltr">
+            <span className="flex items-center gap-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={ic}><path d="M4 12a8 8 0 1 1 3.5 6.6L4 20l1.2-3.6A8 8 0 0 1 4 12z"/></svg>{x.replies}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={ic}><path d="M7 7h10l-3-3M17 17H7l3 3M7 7v6M17 17v-6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={ic}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+            <span className="flex items-center gap-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={ic}><path d="M5 20v-6M10 20V8M15 20v-9M20 20V4"/></svg>{x.views}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Artwork({ art, frameSide = null, between = null, onZoom = null }) {
+  return (
+    <figure className="group flex flex-col items-center">
+      {/* מסגרת זהב + פספרטו לבן, עם חיצי הניווט משני הצדדים */}
+      <div className="relative w-full">
+        <div className="art-frame w-full p-[7px] rounded-[3px] transition-all duration-500 ease-out group-hover:-translate-y-2">
+          <div className="bg-[#fbfaf6] p-2.5 sm:p-4 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06),inset_0_2px_10px_rgba(0,0,0,0.12)]">
+            <button type="button" onClick={() => onZoom && onZoom(art)} aria-label="הגדלת היצירה"
+              className="relative block w-full bg-white cursor-zoom-in">
+              {art.comment
+                ? <CommentCard c={art.comment} />
+                : art.chat
+                ? <ChatCard chat={art.chat} />
+                : art.xpost
+                ? <XPostCard x={art.xpost} />
+                : <img src={art.image} alt={'צילום מסך: ' + art.title} className="block w-full h-auto max-h-[30vh] object-contain mx-auto" loading="lazy" />}
+              <span className="absolute bottom-1.5 left-1.5 flex items-center gap-1 rounded-full bg-black/55 text-white text-[0.68rem] px-2 py-0.5 backdrop-blur-sm" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="w-3 h-3"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4M11 8.5v5M8.5 11h5"/></svg>
+                הגדלה
+              </span>
+            </button>
+          </div>
+        </div>
+        {frameSide}
+      </div>
+      {between}
+      {/* שלט המוזיאון */}
+      <figcaption className="mt-3 max-w-[19rem] text-center font-museum">
+        <div className="mx-auto mb-3 h-px w-10 bg-gradient-to-l from-transparent via-amber-300/70 to-transparent" aria-hidden="true"></div>
+        <p className="text-[#f3e6c4] font-bold text-[1.05rem] leading-snug">{art.title}, {art.year}</p>
+        <p className="text-[#cbb98f]/80 text-[0.9rem] mt-1">{art.medium}</p>
+        <p className="text-[#e9dcb8]/90 text-[0.88rem] mt-3 leading-relaxed">
+          <span className="font-bold text-amber-200/90">דבר האוצרת: </span>{art.curator}
+        </p>
+      </figcaption>
+    </figure>
+  );
+}
+
+/* כפתור חץ בסגנון זהב-שמפניה */
+function GoldArrow({ dir, onClick, label, className = '' }) {
+  // dir: 'prev' (חץ ימינה) | 'next' (חץ שמאלה) – מותאם לקריאה מימין לשמאל
+  return (
+    <button type="button" onClick={onClick} aria-label={label}
+      className={'z-10 shrink-0 w-9 h-9 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-[#ecd9a6] border border-amber-200/35 bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:text-amber-100 hover:border-amber-200/80 hover:bg-amber-200/10 hover:shadow-[0_0_22px_rgba(251,191,36,0.35)] active:scale-95 ' + className}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        {dir === 'prev' ? <path d="M9 6l6 6-6 6" /> : <path d="M15 6l-6 6 6 6" />}
+      </svg>
+    </button>
+  );
+}
+
+/* קרוסלה: יצירה אחת בכל פעם */
+function Carousel({ items }) {
+  const [currentArtIndex, setCurrentArtIndex] = useState(0);
+  const [zoomed, setZoomed] = useState(null);
+  const total = items.length;
+  const go = (delta) => setCurrentArtIndex(i => (i + delta + total) % total);
+  const next = () => go(1);
+  const prev = () => go(-1);
+
+  // מקלדת: חץ שמאלה = הבא, חץ ימינה = הקודם (כיוון קריאה עברי)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') setZoomed(null);
+      if (e.key === 'ArrowLeft') next();
+      if (e.key === 'ArrowRight') prev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [total]);
+
+  // החלקה באצבע
+  const touch = React.useRef(null);
+  const onTouchStart = (e) => { touch.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touch.current == null) return;
+    const dx = e.changedTouches[0].clientX - touch.current;
+    if (Math.abs(dx) > 45) (dx > 0 ? next : prev)();   // החלקה ימינה = הבא, כמו דפדוף בספר עברי
+    touch.current = null;
+  };
+
+  const art = items[currentArtIndex];
+  return (
+    <section className="mt-7" aria-roledescription="קרוסלה" aria-label="יצירות בתערוכה">
+      <div className="mx-auto w-full max-w-[17.75rem] sm:max-w-[22rem]" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        <div key={art.id} className="art-enter">
+          <Artwork art={art} onZoom={setZoomed}
+            frameSide={<>
+              {/* חצים צמודים לצידי המסגרת – תמיד באותו גובה של התמונה */}
+              <GoldArrow dir="prev" onClick={prev} label="היצירה הקודמת" className="absolute top-1/2 -translate-y-1/2 -right-[2.6rem] sm:-right-20" />
+              <GoldArrow dir="next" onClick={next} label="היצירה הבאה" className="absolute top-1/2 -translate-y-1/2 -left-[2.6rem] sm:-left-20" />
+            </>}
+            between={
+              <div className="mt-4 flex flex-col items-center gap-1.5">
+                <div className="flex items-center gap-2" role="tablist" aria-label="בחירת יצירה">
+                  {items.map((it, i) => (
+                    <button key={it.id} type="button" role="tab" aria-selected={i === currentArtIndex}
+                      aria-label={'יצירה ' + (i + 1)} onClick={() => setCurrentArtIndex(i)}
+                      className={'h-2 rounded-full transition-all duration-300 ' +
+                        (i === currentArtIndex ? 'w-6 bg-gradient-to-l from-amber-200 to-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)]' : 'w-2 bg-amber-100/25 hover:bg-amber-100/50')} />
+                  ))}
+                </div>
+                <p className="font-museum text-[0.8rem] tracking-wide text-[#cbb98f]/80" aria-live="polite">
+                  {currentArtIndex + 1} מתוך {total}
+                </p>
+                <span className="hint-bounce mt-1 flex flex-col items-center text-amber-200/70 font-museum text-[0.72rem]" aria-hidden="true">
+                  שלט היצירה
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M6 9.5l6 6 6-6" /></svg>
+                </span>
+              </div>
+            } />
+        </div>
+      </div>
+
+      {/* תצוגה מוגדלת */}
+      {zoomed && (
+        <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 fade-in"
+          onClick={() => setZoomed(null)} role="dialog" aria-modal="true" aria-label={zoomed.title}>
+          {zoomed.comment
+            ? <div className="w-full max-w-md shadow-2xl ring-1 ring-amber-200/30 rounded-lg"><CommentCard c={zoomed.comment} big /></div>
+            : zoomed.xpost
+            ? <div className="w-full max-w-md shadow-2xl ring-1 ring-amber-200/30 rounded-lg"><XPostCard x={zoomed.xpost} big /></div>
+            : zoomed.chat
+            ? <div className="w-full max-w-md max-h-[78vh] overflow-y-auto shadow-2xl ring-1 ring-amber-200/30 rounded-lg" onClick={e => e.stopPropagation()}><ChatCard chat={zoomed.chat} big /></div>
+            : <img src={zoomed.image} alt={'צילום מסך: ' + zoomed.title} className="max-w-full max-h-[78vh] object-contain rounded shadow-2xl ring-1 ring-amber-200/30" />}
+          <p className="mt-4 font-museum text-[#f3e6c4] text-center">{zoomed.title}, {zoomed.year}</p>
+          <button type="button" className="mt-3 text-[0.85rem] text-amber-200/80 underline underline-offset-4">סגירה</button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function MuseumPage() {
+  return (
+    <div className="fade-in relative overflow-hidden bg-[#0d0b10] min-h-[85vh]">
+      {/* אור "זרקורים" רך מלמעלה */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.13),transparent_55%)]" aria-hidden="true"></div>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(147,51,234,0.12),transparent_60%)]" aria-hidden="true"></div>
+      <Sparkles />
+
+      <div className="relative mx-auto max-w-3xl px-3 pt-7 pb-16 sm:pt-12">
+        <header className="text-center max-w-2xl mx-auto">
+          <p className="font-museum tracking-[0.35em] text-[0.65rem] sm:text-xs text-amber-200/60 mb-2">✦ תערוכת קבע ✦</p>
+          <h2 className="gold-text font-museum font-black text-[2rem] sm:text-[3.4rem] leading-[1.05]">מוזיאון הגועל</h2>
+          <div className="mx-auto my-3 h-px w-24 bg-gradient-to-l from-transparent via-amber-300/70 to-transparent" aria-hidden="true"></div>
+          <p className="font-museum italic text-[0.88rem] sm:text-[1.05rem] leading-[1.55] text-[#d8c38e]/85 px-2">
+            תראו, רוב התגובות שאני מקבלת הן מדהימות, עוטפות ומרגשות. אבל הקקי הנותר? החרא הזה פשוט היה חייב תיעוד, אחרת לא הייתם מאמינים לי שזה אמיתי.
+          </p>
+        </header>
+
+        <Carousel items={EXHIBITS} />
+      </div>
+    </div>
+  );
+}
+
+/* ---------- ניווט ---------- */
+const TABS = [
+  { id: 'home', label: 'הכל פה' },
+  { id: 'archive', label: 'מחשבות על' },
+  { id: 'museum', label: 'המוזיאון' },
+];
+
+function readHash() {
+  const h = (location.hash || '').replace('#', '');
+  return TABS.some(t => t.id === h) ? h : 'home';
+}
+
+function NavBar({ active, onChange }) {
+  return (
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-grape-100 shadow-sm">
+      <div className="mx-auto max-w-2xl px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
+        <span className="title-glitch font-hand text-[2.7rem] sm:text-[3.1rem] leading-none shrink-0 -my-2 -translate-y-[0.2em]">מאיה לי לוי</span>
+        <div className="flex ms-auto bg-grape-100/80 rounded-full p-1" role="tablist">
+          {TABS.map(t => (
+            <button key={t.id} role="tab" aria-selected={active === t.id}
+              onClick={() => onChange(t.id)}
+              className={'whitespace-nowrap px-2.5 sm:px-5 py-1.5 rounded-full text-[0.82rem] sm:text-base font-medium transition-all ' +
+                (active === t.id ? 'bg-gradient-to-l from-grape-600 to-rose-400 text-white shadow' : 'text-grape-700 hover:bg-white/70')}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function Footer({ flush = false }) {
+  return (
+    <footer className={'relative bg-[#efe3f8] border-t border-grape-300/50 ' + (flush ? '' : 'mt-16')}>
+      {/* קו עדין בגרדיאנט סגול-ורוד בראש הפוטר */}
+      <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-l from-transparent via-grape-500/40 to-transparent" aria-hidden="true"></div>
+      <div className="mx-auto max-w-2xl px-5 pt-8 pb-9 text-center">
+        <p className="text-[0.85rem] sm:text-sm text-cocoa/65 leading-relaxed">
+          ארכיון של חפירות, דעות ואקטיביזם. כל הזכויות שמורות למאיה לי לוי ©
+        </p>
+        <nav className="mt-2 flex items-center justify-center gap-2 text-xs sm:text-[0.8rem] text-grape-600/70" aria-label="קישורים משפטיים">
+          <a href={LINKS.accessibility} className="hover:text-grape-700 hover:underline underline-offset-4 transition-colors">הצהרת נגישות</a>
+          <span className="text-grape-300" aria-hidden="true">|</span>
+          <a href={LINKS.privacy} className="hover:text-grape-700 hover:underline underline-offset-4 transition-colors">מדיניות פרטיות ותנאי שימוש</a>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  const [tab, setTab] = useState(readHash());
+  useEffect(() => {
+    const onHash = () => setTab(readHash());
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+  const change = (id) => {
+    setTab(id);
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  };
+  /* בכל מעבר לשונית – חוזרים מיד לראש העמוד (אחרי שהתוכן החדש הוצג) */
+  React.useLayoutEffect(() => {
+    const toTop = () => {
+      window.scrollTo(0, 0);
+      if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    toTop();
+    const raf = requestAnimationFrame(toTop);
+    return () => cancelAnimationFrame(raf);
+  }, [tab]);
+  return (
+    <div className="min-h-screen flex flex-col font-body">
+      <NavBar active={tab} onChange={change} />
+      <main className="flex-1">{tab === 'home' ? <HomePage /> : tab === 'archive' ? <ArchivePage /> : <MuseumPage />}</main>
+      <Footer flush={tab !== 'archive'} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
