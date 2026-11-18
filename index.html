@@ -394,7 +394,7 @@ function HomePage() {
    אם הקובץ לא נטען – משתמשים בעותק המובנה למטה.
    ============================================================ */
 const FALLBACK_POSTS = {
-  "updated": "2026-11-16",
+  "updated": "2026-11-15",
   "tags": [
     "פמיניזם",
     "פוליטיקה כללית",
@@ -411,47 +411,23 @@ const FALLBACK_POSTS = {
     "הומור ומחשבות",
     "אחר"
   ],
-  "posts": [
-    {
-      "id": "p1",
-      "date": "2026-10-28",
-      "text": "[פוסט לדוגמה]\nתזכורת קטנה לכל מי שצריכה אותה היום: הגוף שלך הוא לא פרויקט שצריך לתקן. הוא הבית שלך. מותר לך להתלבש יפה, לצאת לים ולהצטלם בלי לחכות ל\"גרסה הבאה\" של עצמך.",
-      "tags": [
-        "דימוי גוף חיובי"
-      ],
-      "URL": "https://www.facebook.com/"
-    },
-    {
-      "id": "p2",
-      "date": "2026-09-14",
-      "text": "[פוסט לדוגמה – ארוך, כדי להדגים את הקיצור]\nהיום בטיפול דיברנו על זה שמותר לבקש עזרה גם כשנדמה ש\"זה לא מספיק נורא\". אין סף מינימלי לכאב. אם אתן מתלבטות – זה בדיוק הזמן לפנות.\nהרבה פעמים אנחנו מחכות שהמצב יידרדר, כאילו צריך להרוויח את הזכות לקבל תמיכה. אבל ככה זה לא עובד. אף אחת לא מחכה ששבר ביד יהפוך לשבר פתוח כדי ללכת לרופא.\nאז אם משהו מרגיש לכן כבד – תדברו. עם חברה, עם המשפחה, עם איש או אשת מקצוע. זה לא חולשה, זה בדיוק ההפך.\nואני מבטיחה לכן: הרגע שבו מבקשים עזרה הוא לא סוף הסיפור. הוא הרגע שבו מתחילים לכתוב פרק חדש.",
-      "tags": [
-        "בריאות הנפש"
-      ],
-      "URL": "https://www.facebook.com/"
-    },
-    {
-      "id": "p3",
-      "date": "2026-08-02",
-      "text": "[פוסט לדוגמה]\nפמיניזם זה לא \"נשים נגד גברים\". זה כולנו נגד תבניות שמכאיבות לכולנו. ובינתיים, עדכון חשוב מהספר: סיימתי את הפרק השלישי, והוא מצחיק אותי יותר ממה שנעים לי להודות 😅",
-      "tags": [
-        "פמיניזם",
-        "״לא סיפור כבד״ - הספר שלי",
-        "הומור ומחשבות"
-      ],
-      "URL": "https://www.facebook.com/"
-    }
-  ]
+  "posts": []
 };
 
 function usePosts() {
-  const [data, setData] = useState(FALLBACK_POSTS);
+  const [data, setData] = useState({ ...FALLBACK_POSTS, loading: true });
   useEffect(() => {
     let alive = true;
     fetch('posts.json', { cache: 'no-store' })
       .then(r => (r.ok ? r.json() : Promise.reject()))
-      .then(j => { if (alive && j && Array.isArray(j.posts)) setData({ updated: j.updated || FALLBACK_POSTS.updated, tags: j.tags || FALLBACK_POSTS.tags, posts: j.posts }); })
-      .catch(() => {});
+      .then(j => {
+        if (!alive || !j || !Array.isArray(j.posts)) return;
+        // מכינים מראש טקסט מנורמל לחיפוש מהיר
+        const posts = j.posts.map(p => ({ ...p, _hay: normalize(p.text + ' ' + (p.tags || []).join(' ')) }))
+          .sort((a, b) => (a.date < b.date ? 1 : -1));
+        setData({ updated: j.updated || FALLBACK_POSTS.updated, tags: j.tags || FALLBACK_POSTS.tags, posts, loading: false });
+      })
+      .catch(() => alive && setData(d => ({ ...d, loading: false, error: true })));
     return () => { alive = false; };
   }, []);
   return data;
@@ -553,13 +529,29 @@ function ChipsRow({ children }) {
 }
 
 function PostCard({ post, query, activeTags, onTag }) {
+  // פוסט עם קישור לפייסבוק: תצוגה מקדימה של 6 שורות והמשך בפייסבוק.
+  // פוסט בלי קישור (עדיין): אפשר לפתוח אותו במלואו כאן באתר.
+  const [open, setOpen] = useState(false);
+  const [overflows, setOverflows] = useState(true);
+  const textRef = React.useRef(null);
+  React.useLayoutEffect(() => {
+    const el = textRef.current;
+    if (el && !open) setOverflows(el.scrollHeight > el.clientHeight + 2);
+  }, [post.text, open]);
+  const canExpand = !post.URL && (overflows || open);
   return (
     <article className="bg-white rounded-3xl shadow-[0_6px_24px_-8px_rgba(107,33,168,0.18)] ring-1 ring-grape-100 p-5 sm:p-6">
       <time dateTime={post.date} className="block text-sm font-medium text-grape-600/80 mb-3">{formatDate(post.date)}</time>
-      {/* תצוגה מקדימה: עד 6 שורות, הקריאה המלאה בפייסבוק */}
-      <p className="text-[1.12rem] sm:text-[1.2rem] leading-[1.45] text-cocoa whitespace-pre-line line-clamp-6">
+      <p ref={textRef} className={'text-[1.12rem] sm:text-[1.2rem] leading-[1.45] text-cocoa whitespace-pre-line ' + (open ? '' : 'line-clamp-6')}>
         <Highlight text={post.text} query={query} />
       </p>
+      {canExpand && (
+        <button type="button" onClick={() => setOpen(v => !v)} aria-expanded={open}
+          className="inline-flex items-center gap-1.5 mt-3 text-[0.98rem] font-bold text-grape-600 hover:text-grape-800 underline-offset-4 hover:underline transition-colors">
+          {open ? 'הצג/י פחות' : 'להמשך הקריאה'}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className={'w-4 h-4 shrink-0 transition-transform ' + (open ? 'rotate-180' : '')} aria-hidden="true"><path d="M6 9.5l6 6 6-6" /></svg>
+        </button>
+      )}
       {post.URL && (
         <a href={post.URL} target="_blank" rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 mt-3 text-[0.98rem] font-bold text-grape-600 hover:text-grape-800 underline-offset-4 hover:underline transition-colors">
@@ -602,21 +594,21 @@ function ResultsCount({ count, tags, query }) {
 }
 
 function ArchivePage() {
-  const { tags, posts, updated } = usePosts();
+  const { tags, posts, updated, loading, error } = usePosts();
   const [query, setQuery] = useState('');
   const [activeTags, setActiveTags] = useState([]);
+  const PAGE = 15;
+  const [shown, setShown] = useState(PAGE);
 
   const results = React.useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean);
-    return [...posts]
-      .sort((a, b) => (a.date < b.date ? 1 : -1))
+    return posts
       .filter(p => activeTags.every(t => (p.tags || []).includes(t)))
-      .filter(p => {
-        if (!words.length) return true;
-        const hay = normalize(p.text + ' ' + (p.tags || []).join(' '));
-        return words.every(w => hay.includes(w));
-      });
+      .filter(p => !words.length || words.every(w => p._hay.includes(w)));
   }, [posts, query, activeTags]);
+
+  // כל שינוי בחיפוש או בתגיות – מתחילים שוב מ־15 הראשונים
+  useEffect(() => { setShown(PAGE); }, [query, activeTags]);
 
   const toggleTag = (t) => setActiveTags(cur => (cur.includes(t) ? cur.filter(x => x !== t) : [...cur, t]));
   const filtering = query.trim() || activeTags.length > 0;
@@ -657,17 +649,32 @@ function ArchivePage() {
 
         <div className="px-5">
           <p className="text-sm text-cocoa/60 mb-4 mt-1" aria-live="polite">
-            <ResultsCount count={results.length} tags={activeTags} query={query.trim()} />
+            {loading ? "\u00a0" : <ResultsCount count={results.length} tags={activeTags} query={query.trim()} />}
           </p>
           <p className="text-xs text-cocoa/45 -mt-3 mb-5">מעודכן נכון ל־{formatDate(updated || new Date().toISOString().slice(0, 10))}</p>
 
           <div className="space-y-5">
-            {results.map(p => (
+            {results.slice(0, shown).map(p => (
               <PostCard key={p.id} post={p} query={query} activeTags={activeTags} onTag={toggleTag} />
             ))}
           </div>
 
-          {results.length === 0 && (
+          {loading && (
+            <p className="text-center text-grape-600/80 py-10 flex items-center justify-center gap-3">
+              <span className="typing inline-flex gap-[5px]"><i></i><i></i><i></i></span> טוענת את כל הדעות שלי…
+            </p>
+          )}
+
+          {results.length > shown && (
+            <div className="text-center mt-8">
+              <button type="button" onClick={() => setShown(n => n + PAGE)}
+                className="rounded-full bg-white border border-grape-300 text-grape-700 font-medium px-6 py-2.5 shadow-sm hover:border-grape-600 hover:shadow-md transition">
+                עוד פוסטים ({results.length - shown} נשארו)
+              </button>
+            </div>
+          )}
+
+          {!loading && results.length === 0 && (
             <div className="text-center bg-white/70 rounded-3xl border-2 border-dashed border-grape-300 p-10 mt-2">
               <p className="font-hand text-rose-400 text-[2.4rem] leading-[0.9] mb-3">תפסת אותי בלי מילים</p>
               <p className="text-cocoa/70 mb-5">מסתבר שעל זה ספציפית <strong className="font-bold text-cocoa">עוד לא</strong> חפרתי (או שפשוט כדאי לנסות מילת חיפוש אחרת).</p>
