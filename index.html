@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="מאיה לי">
 <title>מאיה לי לוי – האתר הרשמי</title>
 <!-- תצוגה מקדימה לקישור (וואטסאפ, פייסבוק, X וכו').
      אם כתובת האתר משתנה – לעדכן את SITE_URL בשתי השורות של og:url ו־og:image -->
@@ -85,6 +90,7 @@
   .group:hover .art-frame {
     box-shadow: 0 34px 70px -15px rgba(0,0,0,0.9), 0 0 0 1px rgba(253,224,71,0.45), 0 0 38px 6px rgba(251,191,36,0.38), 0 0 90px 10px rgba(251,191,36,0.15);
   }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #ec4899; outline-offset: 3px; border-radius: 10px; }
   @media (prefers-reduced-motion: reduce) { .gold-text, .sparkle { animation: none; } .sparkle { opacity: .6; } }
   .hint-bounce { animation: hintBounce 1.6s ease-in-out infinite; }
   @keyframes hintBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
@@ -125,7 +131,7 @@ const LINKS = {
   work:      'https://wa.me/message/AXZOPNX3SZHVB1',   // להצעות שת"פים ועבודה
   tweet:     'https://www.facebook.com/share/1EBoTNqRCs/',
   privacy:   '#',   // מדיניות פרטיות ותנאי שימוש
-  accessibility: '#',   // הצהרת נגישות
+  accessibility: '#accessibility',   // הצהרת נגישות
 };
 const VIDEO_URL = 'https://youtu.be/Y84tAoOr0x8';
 
@@ -253,7 +259,7 @@ function Hero() {
               d="M44 4 C 52 20, 54 34, 46 44 C 38 54, 28 44, 36 38 C 46 30, 56 52, 48 68 C 40 80, 24 86, 8 86" head="M19 78 Q 13 82, 8 86 Q 14 89, 20 94" />
           </div>
           <div className="col-start-2 row-start-3 mt-8 space-y-4">
-            <LinkButton href={LINKS.calculator}>עזרו לי להיאבק על האמת מול גיא רופא <strong className="font-extrabold">שאינו רופא</strong></LinkButton>
+            <LinkButton href={LINKS.calculator}>גיא רופא רוצה שאשתוק. <strong className="font-extrabold">נראה לכם שזה יקרה?</strong></LinkButton>
             <LinkButton href={LINKS.book}>הספר שלי</LinkButton>
             <LinkButton href={LINKS.whatsapp}>ערוץ הוואטסאפ שלי</LinkButton>
             <LinkButton href={LINKS.work}>להצעות שת״פים ועבודה</LinkButton>
@@ -1050,6 +1056,7 @@ const TABS = [
 
 function readHash() {
   const h = (location.hash || '').replace('#', '');
+  if (h === 'accessibility') return h;
   return TABS.some(t => t.id === h) ? h : 'home';
 }
 
@@ -1070,6 +1077,66 @@ function NavBar({ active, onChange }) {
         </div>
       </div>
     </nav>
+  );
+}
+
+/* ---------- הצהרת נגישות (עמוד נסתר, נפתח מהפוטר) ---------- */
+function A11yItem({ icon, children }) {
+  return (
+    <li className="flex items-start gap-3">
+      <span className="shrink-0 w-9 h-9 rounded-full bg-grape-100 flex items-center justify-center text-lg" aria-hidden="true">{icon}</span>
+      <span className="pt-1.5">{children}</span>
+    </li>
+  );
+}
+
+function AccessibilityPage({ onBack }) {
+  return (
+    <div className="mx-auto max-w-2xl px-4 sm:px-6 pt-8 pb-4">
+      <div className="rounded-[2rem] bg-white/75 shadow-xl shadow-purple-900/10 ring-1 ring-grape-100 px-5 sm:px-9 py-8 text-cocoa leading-relaxed text-[1.02rem] sm:text-lg">
+        <h1 className="font-hand text-grape-700 text-[2.6rem] sm:text-[3.2rem] leading-none mb-1">הצהרת נגישות</h1>
+        <p className="text-sm text-cocoa/55 mb-6">או בשפה של בני אדם: האתר הזה בשביל כולם</p>
+
+        <p className="mb-6">
+          אני מאמינה שדעות, חפירות ואקטיביזם צריכים להגיע <strong>לכל מי שרוצה לקרוא אותם</strong> – גם למי שגולשים עם קורא מסך, עם מקלדת בלבד, עם הגדלה, או פשוט עם טלפון ישן ועיניים עייפות בשתיים בלילה.
+          לכן בניתי את האתר מתוך שאיפה שיהיה נוח ונגיש ככל האפשר.
+        </p>
+
+        <h2 className="font-bold text-grape-700 text-xl mb-3">מה עשיתי כדי שיהיה נגיש</h2>
+        <ul className="space-y-3 mb-7">
+          <A11yItem icon="🔊">תיאורים לתמונות ותוויות לכפתורים ולאייקונים, כדי שקוראי מסך יוכלו להקריא אותם.</A11yItem>
+          <A11yItem icon="⌨️">אפשר לנווט בכל האתר עם מקלדת, ויש סימון ורוד ובולט על הפריט שנמצאים עליו.</A11yItem>
+          <A11yItem icon="🔍">אפשר להגדיל את הטקסט והתצוגה בלי שהאתר יישבר.</A11yItem>
+          <A11yItem icon="📱">האתר מותאם לטלפון, לטאבלט ולמחשב, ונכתב מימין לשמאל כמו שצריך.</A11yItem>
+          <A11yItem icon="🌀">מי שהגדירו במכשיר "הפחתת תנועה" – האנימציות באתר נרגעות בשבילם.</A11yItem>
+          <A11yItem icon="🎨">השתדלתי לשמור על ניגודיות טובה בין הטקסט לרקע, גם בתוך כל הסגול הזה.</A11yItem>
+        </ul>
+
+        <h2 className="font-bold text-grape-700 text-xl mb-3">מה עוד לא מושלם</h2>
+        <p className="mb-7">
+          אני לא חברת הייטק, אני אדם אחד עם אתר אחד 🙃 ייתכן שיש פינות שעוד לא נגישות כמו שצריך.
+          חלק מהקישורים מובילים לאתרים אחרים (פייסבוק, וואטסאפ, אתר הגיוס ועוד) – על הנגישות שלהם אין לי שליטה.
+          חלק מהתוכן, כמו צילומי המסך במוזיאון, הוא צילום מסך במקור – השתדלתי להציג אותו גם כטקסט.
+        </p>
+
+        <h2 className="font-bold text-grape-700 text-xl mb-3">נתקלת במשהו לא נגיש?</h2>
+        <p className="mb-4">
+          ספרו לי! אני רוצה לדעת ולתקן. כתבו לי מה קרה ובאיזה עמוד, ואחזור אליכם בהקדם.
+        </p>
+        <a href={LINKS.work} target="_blank" rel="noopener noreferrer"
+           className="inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-grape-600 to-rose-400 text-white font-medium px-5 py-2.5 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+          כתבו לי בוואטסאפ 💬
+        </a>
+
+        <p className="mt-8 text-sm text-cocoa/50">עודכן לאחרונה: נובמבר 2026</p>
+      </div>
+
+      <div className="text-center mt-6">
+        <button type="button" onClick={onBack} className="text-grape-600 hover:text-grape-800 underline underline-offset-4 font-medium">
+          → חזרה לאתר
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -1118,7 +1185,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col font-body">
       <NavBar active={tab} onChange={change} />
-      <main className="flex-1">{tab === 'home' ? <HomePage /> : tab === 'archive' ? <ArchivePage /> : <MuseumPage />}</main>
+      <main className="flex-1">{tab === 'home' ? <HomePage /> : tab === 'archive' ? <ArchivePage /> : tab === 'accessibility' ? <AccessibilityPage onBack={() => change('home')} /> : <MuseumPage />}</main>
       <Footer flush={tab !== 'archive'} />
     </div>
   );
