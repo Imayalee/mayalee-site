@@ -8,6 +8,57 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="מאיה לי">
+<link rel="canonical" href="https://imayalee.github.io/mayalee-site/">
+<meta name="author" content="מאיה לי לוי">
+<!-- "כרטיס ביקור" לגוגל: מי אני והרשתות שלי -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Person",
+   "@id": "https://imayalee.github.io/mayalee-site/#maya",
+   "name": "מאיה לי לוי",
+   "alternateName": [
+    "Maya Lee Levy",
+    "מאיה לי"
+   ],
+   "jobTitle": "פעילה חברתית, יוצרת תוכן, כותבת ומנהלת דיגיטל",
+   "description": "פעילה חברתית, יוצרת תוכן, כותבת ומנהלת דיגיטל",
+   "url": "https://imayalee.github.io/mayalee-site/",
+   "image": "https://imayalee.github.io/mayalee-site/portrait.webp",
+   "sameAs": [
+    "https://www.instagram.com/maya.leevy",
+    "https://www.facebook.com/share/1DdVqbCCTZ/",
+    "https://www.tiktok.com/@imayalee",
+    "https://x.com/im_mayalee",
+    "https://whatsapp.com/channel/0029VamSaELEawdoxZkaD406"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://imayalee.github.io/mayalee-site/#site",
+   "url": "https://imayalee.github.io/mayalee-site/",
+   "name": "מאיה לי לוי – האתר הרשמי",
+   "inLanguage": "he",
+   "author": {
+    "@id": "https://imayalee.github.io/mayalee-site/#maya"
+   },
+   "publisher": {
+    "@id": "https://imayalee.github.io/mayalee-site/#maya"
+   }
+  },
+  {
+   "@type": "Book",
+   "name": "לא סיפור כבד",
+   "inLanguage": "he",
+   "author": {
+    "@id": "https://imayalee.github.io/mayalee-site/#maya"
+   }
+  }
+ ]
+}
+</script>
 <title>מאיה לי לוי – האתר הרשמי</title>
 <!-- תצוגה מקדימה לקישור (וואטסאפ, פייסבוק, X וכו').
      אם כתובת האתר משתנה – לעדכן את SITE_URL בשתי השורות של og:url ו־og:image -->
@@ -68,6 +119,11 @@
   .hero-bg { background: linear-gradient(180deg, #b26ef5 0%, #e9d5ff 42%, #f6e3f1 70%, #dcb9cc 100%); }
   .page-bg { background: linear-gradient(180deg, #f7f0fc 0%, #fbf4fb 50%, #f7eef8 100%); }
   .photo-fade { -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%); mask-image: linear-gradient(180deg, #000 78%, transparent 100%); }
+  .dice-roll { animation: diceRoll .7s cubic-bezier(.3,.6,.4,1) both; display:inline-block; }
+  @keyframes diceRoll { 0% { transform: rotate(0) scale(1); } 40% { transform: rotate(320deg) scale(1.25); } 100% { transform: rotate(720deg) scale(1); } }
+  .lucky-in { animation: luckyIn .45s cubic-bezier(.2,.9,.3,1.2) both; }
+  @keyframes luckyIn { from { opacity: 0; transform: translateY(12px) scale(.97) rotate(-.6deg); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .dice-roll, .lucky-in { animation: none; } }
   .fade-in { animation: fadeIn .35s ease both; }
   .art-enter { animation: artIn .55s cubic-bezier(.2,.7,.2,1) both; }
   @keyframes artIn { from { opacity: 0; transform: translateY(10px) scale(.985); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
@@ -599,6 +655,49 @@ function ResultsCount({ count, tags, query }) {
   );
 }
 
+/* ---------- פוסט אקראי 🎲 ---------- */
+const LUCKY_INTROS = ['הקוביה דיברה:', 'שלפתי לך מהמגירה:', 'ההגרלה קבעה:', 'במיוחד בשבילך:', 'גורל זה גורל:'];
+
+function luckyIntro(post) {
+  const y = parseInt((post.date || '').slice(0, 4), 10);
+  const now = new Date().getFullYear();
+  if (y && now - y >= 4 && Math.random() < 0.5) return `פוסט עתיק מ־${y}, אל תשפטו 😅`;
+  return LUCKY_INTROS[Math.floor(Math.random() * LUCKY_INTROS.length)];
+}
+
+function DiceButton({ onClick, rolling, disabled }) {
+  return (
+    <button type="button" onClick={onClick} disabled={disabled}
+      className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-white border-2 border-rose-300 text-grape-700 font-medium text-sm px-3.5 py-1.5 shadow-sm hover:border-rose-400 hover:bg-rose-50 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 transition-all disabled:opacity-50">
+      <span className={'text-lg leading-none ' + (rolling ? 'dice-roll' : '')} aria-hidden="true">🎲</span>
+      {rolling ? 'מגרילה…' : 'תפתיעי אותי'}
+    </button>
+  );
+}
+
+function LuckyCard({ post, intro, query, activeTags, onTag, onAgain, onClose, rolling }) {
+  return (
+    <div className="lucky-in relative rounded-[1.9rem] p-[2.5px] bg-gradient-to-l from-grape-500 via-rose-400 to-amber-300 shadow-xl shadow-rose-300/30 mb-8" role="region" aria-label="פוסט אקראי">
+      <div className="rounded-[1.75rem] bg-[#fdf8ff] px-1 pt-4 pb-4">
+        <div className="flex items-center justify-between px-4 mb-2">
+          <p className="font-hand text-rose-500 text-[2rem] leading-none">{intro}</p>
+          <button type="button" onClick={onClose} aria-label="סגירת הפוסט האקראי"
+            className="w-8 h-8 rounded-full text-grape-600 hover:bg-grape-100 flex items-center justify-center text-xl leading-none">×</button>
+        </div>
+        <div className={rolling ? 'opacity-40 transition-opacity' : 'transition-opacity'}>
+          <PostCard key={post.id} post={post} query={query} activeTags={activeTags} onTag={onTag} />
+        </div>
+        <div className="text-center mt-4">
+          <button type="button" onClick={onAgain} disabled={rolling}
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-grape-600 to-rose-400 text-white font-medium px-5 py-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60">
+            <span className={rolling ? 'dice-roll' : ''} aria-hidden="true">🎲</span> עוד אחד
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ArchivePage() {
   const { tags, posts, updated, loading, error } = usePosts();
   const [query, setQuery] = useState('');
@@ -615,6 +714,28 @@ function ArchivePage() {
 
   // כל שינוי בחיפוש או בתגיות – מתחילים שוב מ־15 הראשונים
   useEffect(() => { setShown(PAGE); }, [query, activeTags]);
+
+  // פוסט אקראי – מתוך התוצאות הנוכחיות (מכבד חיפוש ותגיות)
+  const [lucky, setLucky] = useState(null);
+  const [rolling, setRolling] = useState(false);
+  const luckyRef = React.useRef(null);
+  const roll = () => {
+    if (!results.length || rolling) return;
+    setRolling(true);
+    setTimeout(() => {
+      let pick = results[Math.floor(Math.random() * results.length)];
+      if (lucky && results.length > 1) {
+        let n = 0;
+        while (pick.id === lucky.post.id && n++ < 10) pick = results[Math.floor(Math.random() * results.length)];
+      }
+      setLucky({ post: pick, intro: luckyIntro(pick) });
+      setRolling(false);
+      requestAnimationFrame(() => {
+        const el = luckyRef.current;
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+      });
+    }, 650);
+  };
 
   const toggleTag = (t) => setActiveTags(cur => (cur.includes(t) ? cur.filter(x => x !== t) : [...cur, t]));
   const filtering = query.trim() || activeTags.length > 0;
@@ -654,10 +775,20 @@ function ArchivePage() {
         </ChipsRow>
 
         <div className="px-5">
-          <p className="text-sm text-cocoa/60 mb-4 mt-1" aria-live="polite">
-            {loading ? "\u00a0" : <ResultsCount count={results.length} tags={activeTags} query={query.trim()} />}
-          </p>
+          <div className="flex items-center justify-between gap-3 mb-4 mt-1">
+            <p className="text-sm text-cocoa/60" aria-live="polite">
+              {loading ? "\u00a0" : <ResultsCount count={results.length} tags={activeTags} query={query.trim()} />}
+            </p>
+            {!loading && results.length > 0 && <DiceButton onClick={roll} rolling={rolling} />}
+          </div>
           <p className="text-xs text-cocoa/45 -mt-3 mb-5">מעודכן נכון ל־{formatDate(updated || new Date().toISOString().slice(0, 10))}</p>
+
+          <div ref={luckyRef}>
+            {lucky && (
+              <LuckyCard post={lucky.post} intro={lucky.intro} query={query} activeTags={activeTags} onTag={toggleTag}
+                onAgain={roll} onClose={() => setLucky(null)} rolling={rolling} />
+            )}
+          </div>
 
           <div className="space-y-5">
             {results.slice(0, shown).map(p => (
@@ -1159,6 +1290,30 @@ function Footer({ flush = false }) {
   );
 }
 
+/* ---------- כפתור "חזרה למעלה" צף – מופיע אחרי גלילה, בכל העמודים ---------- */
+function BackToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 1.2);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
+  }, []);
+  const up = () => {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  };
+  return (
+    <button type="button" onClick={up} aria-label="חזרה לראש העמוד" tabIndex={show ? 0 : -1}
+      style={{ bottom: 'calc(1.1rem + env(safe-area-inset-bottom))' }}
+      className={'fixed left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-br from-grape-600 to-rose-400 text-white shadow-lg shadow-purple-900/30 ring-2 ring-white/70 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 ' +
+        (show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none')}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true"><path d="M6 14.5l6-6 6 6" /></svg>
+    </button>
+  );
+}
+
 function App() {
   const [tab, setTab] = useState(readHash());
   useEffect(() => {
@@ -1187,6 +1342,7 @@ function App() {
       <NavBar active={tab} onChange={change} />
       <main className="flex-1">{tab === 'home' ? <HomePage /> : tab === 'archive' ? <ArchivePage /> : tab === 'accessibility' ? <AccessibilityPage onBack={() => change('home')} /> : <MuseumPage />}</main>
       <Footer flush={tab !== 'archive'} />
+      <BackToTop />
     </div>
   );
 }
