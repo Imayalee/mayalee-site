@@ -606,7 +606,11 @@ async function shareLink(hashPath, text) {
 }
 function firstLine(text, max = 90) {
   const line = (text || '').split('\n').map(x => x.trim()).find(Boolean) || '';
-  return line.length > max ? line.slice(0, max).trim() + '…' : line;
+  if (line.length <= max) return line;
+  // חותכים רק בין מילים, כדי שמילה לא תיחתך באמצע
+  const cut = line.slice(0, max + 1);
+  const sp = cut.lastIndexOf(' ');
+  return (sp > max * 0.5 ? cut.slice(0, sp) : line.slice(0, max)).replace(/[\s,.\-–:;]+$/, '') + '…';
 }
 function ShareIcon({ className = 'w-[1.15rem] h-[1.15rem]' }) {
   return (
