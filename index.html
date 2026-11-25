@@ -590,6 +590,47 @@ function ChipsRow({ children }) {
   );
 }
 
+/* ---------- שיתוף: קישור ישיר לפוסט / ליצירה ---------- */
+function siteBase() {
+  const c = document.querySelector('link[rel="canonical"]');
+  return (c && c.href) || (location.origin + location.pathname);
+}
+async function shareLink(hashPath, text) {
+  const url = siteBase().replace(/#.*$/, '') + '#' + hashPath;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'מאיה לי לוי', text, url }); return 'shared'; }
+    catch (e) { if (e && e.name === 'AbortError') return 'cancel'; }
+  }
+  try { await navigator.clipboard.writeText(text ? text + '\n' + url : url); return 'copied'; }
+  catch (e) { window.prompt('העתיקו את הקישור:', url); return 'copied'; }
+}
+function firstLine(text, max = 90) {
+  const line = (text || '').split('\n').map(x => x.trim()).find(Boolean) || '';
+  return line.length > max ? line.slice(0, max).trim() + '…' : line;
+}
+function ShareIcon({ className = 'w-[1.15rem] h-[1.15rem]' }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M12 3.5v11.5" /><path d="M7.5 8L12 3.5 16.5 8" /><path d="M6 11.5H5a1.5 1.5 0 0 0-1.5 1.5v6A1.5 1.5 0 0 0 5 20.5h14a1.5 1.5 0 0 0 1.5-1.5v-6A1.5 1.5 0 0 0 19 11.5h-1" />
+    </svg>
+  );
+}
+function ShareButton({ hashPath, text, label, className, toastClass }) {
+  const [copied, setCopied] = useState(false);
+  const onClick = async () => {
+    const r = await shareLink(hashPath, text);
+    if (r === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2200); }
+  };
+  return (
+    <span className="relative inline-flex">
+      <button type="button" onClick={onClick} aria-label={label} title={label} className={className}>
+        <ShareIcon />
+      </button>
+      {copied && <span role="status" className={'fade-in absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full text-xs font-medium px-3 py-1 shadow-md ' + toastClass}>הקישור הועתק ✨</span>}
+    </span>
+  );
+}
+
 function PostCard({ post, query, activeTags, onTag }) {
   // פוסט עם קישור לפייסבוק: תצוגה מקדימה של 6 שורות והמשך בפייסבוק.
   // פוסט בלי קישור (עדיין): אפשר לפתוח אותו במלואו כאן באתר.
@@ -621,9 +662,9 @@ function PostCard({ post, query, activeTags, onTag }) {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 shrink-0 transition-transform group-hover:-translate-x-0.5" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" /></svg>
         </a>
       )}
-      {post.tags && post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-grape-100">
-          {post.tags.map(t => (
+      <div className="flex items-start gap-2 mt-4 pt-4 border-t border-grape-100">
+        <div className="flex flex-wrap gap-2 flex-1">
+          {(post.tags || []).map(t => (
             <button key={t} type="button" onClick={() => onTag(t)}
               className={'inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1 transition-colors ' +
                 (activeTags.includes(t) ? 'bg-grape-600 text-white' : 'bg-grape-100/80 text-grape-700 hover:bg-grape-300/60')}>
@@ -631,7 +672,10 @@ function PostCard({ post, query, activeTags, onTag }) {
             </button>
           ))}
         </div>
-      )}
+        <ShareButton hashPath={'archive/' + post.id} text={firstLine(post.text)} label="שיתוף הפוסט"
+          className="shrink-0 w-8 h-8 -mt-0.5 rounded-full text-grape-600/70 hover:text-grape-700 hover:bg-grape-100 flex items-center justify-center transition-colors"
+          toastClass="bg-grape-700 text-white" />
+      </div>
     </article>
   );
 }
@@ -677,22 +721,22 @@ function DiceButton({ onClick, rolling, disabled }) {
 
 function LuckyCard({ post, intro, query, activeTags, onTag, onAgain, onClose, rolling }) {
   return (
-    <div className="lucky-in relative rounded-[1.9rem] p-[2.5px] bg-gradient-to-l from-grape-500 via-rose-400 to-amber-300 shadow-xl shadow-rose-300/30 mb-8" role="region" aria-label="פוסט אקראי">
-      <div className="rounded-[1.75rem] bg-[#fdf8ff] px-1 pt-4 pb-4">
+    <div className="lucky-in relative rounded-[1.9rem] p-[2.5px] bg-gradient-to-l from-grape-500 via-rose-400 to-amber-300 shadow-xl shadow-rose-300/30 mb-8" role="region" aria-label={intro}>
+      <div className={'rounded-[1.75rem] bg-[#fdf8ff] px-1 pt-4 ' + (onAgain ? 'pb-4' : 'pb-1')}>
         <div className="flex items-center justify-between px-4 mb-2">
           <p className="font-hand text-rose-500 text-[2rem] leading-none">{intro}</p>
-          <button type="button" onClick={onClose} aria-label="סגירת הפוסט האקראי"
+          <button type="button" onClick={onClose} aria-label="סגירה"
             className="w-8 h-8 rounded-full text-grape-600 hover:bg-grape-100 flex items-center justify-center text-xl leading-none">×</button>
         </div>
         <div className={rolling ? 'opacity-40 transition-opacity' : 'transition-opacity'}>
           <PostCard key={post.id} post={post} query={query} activeTags={activeTags} onTag={onTag} />
         </div>
-        <div className="text-center mt-4">
+        {onAgain && <div className="text-center mt-4">
           <button type="button" onClick={onAgain} disabled={rolling}
             className="inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-grape-600 to-rose-400 text-white font-medium px-5 py-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-60">
             <span className={rolling ? 'dice-roll' : ''} aria-hidden="true">🎲</span> עוד אחד
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
@@ -714,6 +758,26 @@ function ArchivePage() {
 
   // כל שינוי בחיפוש או בתגיות – מתחילים שוב מ־15 הראשונים
   useEffect(() => { setShown(PAGE); }, [query, activeTags]);
+
+  // פוסט ששותף בקישור: ‎#archive/<מזהה>
+  const readShared = () => { const m = (location.hash || '').match(/^#archive\/(.+)$/); return m ? decodeURIComponent(m[1]) : null; };
+  const [sharedId, setSharedId] = useState(readShared);
+  const sharedRef = React.useRef(null);
+  useEffect(() => {
+    const onHash = () => setSharedId(readShared());
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+  const sharedPost = React.useMemo(() => (sharedId ? posts.find(p => p.id === sharedId) : null), [posts, sharedId]);
+  useEffect(() => {
+    if (!sharedPost) return;
+    const t = setTimeout(() => {
+      const el = sharedRef.current;
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+    }, 350);
+    return () => clearTimeout(t);
+  }, [sharedPost]);
+  const closeShared = () => { setSharedId(null); try { history.replaceState(null, '', '#archive'); } catch (e) {} };
 
   // פוסט אקראי – מתוך התוצאות הנוכחיות (מכבד חיפוש ותגיות)
   const [lucky, setLucky] = useState(null);
@@ -782,6 +846,13 @@ function ArchivePage() {
             {!loading && results.length > 0 && <DiceButton onClick={roll} rolling={rolling} />}
           </div>
           <p className="text-xs text-cocoa/45 -mt-3 mb-5">מעודכן נכון ל־{formatDate(updated || new Date().toISOString().slice(0, 10))}</p>
+
+          <div ref={sharedRef}>
+            {sharedPost && (
+              <LuckyCard post={sharedPost} intro="רצו לשתף איתך את זה:" query={query} activeTags={activeTags} onTag={toggleTag}
+                onClose={closeShared} />
+            )}
+          </div>
 
           <div ref={luckyRef}>
             {lucky && (
@@ -1054,6 +1125,11 @@ function Artwork({ art, frameSide = null, between = null, onZoom = null }) {
         <p className="text-[#e9dcb8]/90 text-[0.88rem] mt-3 leading-relaxed">
           <span className="font-bold text-amber-200/90">דבר האוצרת: </span>{art.curator}
         </p>
+        <div className="mt-4 flex justify-center">
+          <ShareButton hashPath={'museum/' + art.id} text={art.title + ', ' + art.year + ' – ממוזיאון הגועל'} label="שיתוף היצירה"
+            className="w-9 h-9 rounded-full text-[#ecd9a6] border border-amber-200/35 hover:text-amber-100 hover:border-amber-200/80 hover:bg-amber-200/10 hover:shadow-[0_0_18px_rgba(251,191,36,0.3)] flex items-center justify-center transition-all"
+            toastClass="bg-amber-200 text-[#2a210f]" />
+        </div>
       </figcaption>
     </figure>
   );
@@ -1073,8 +1149,15 @@ function GoldArrow({ dir, onClick, label, className = '' }) {
 }
 
 /* קרוסלה: יצירה אחת בכל פעם */
+function readSharedArt(items) {
+  const m = (location.hash || '').match(/^#museum\/(.+)$/);
+  if (!m) return -1;
+  return items.findIndex(it => it.id === decodeURIComponent(m[1]));
+}
+
 function Carousel({ items }) {
-  const [currentArtIndex, setCurrentArtIndex] = useState(0);
+  const [sharedIdx] = useState(() => readSharedArt(items));
+  const [currentArtIndex, setCurrentArtIndex] = useState(sharedIdx >= 0 ? sharedIdx : 0);
   const [zoomed, setZoomed] = useState(null);
   const total = items.length;
   const go = (delta) => setCurrentArtIndex(i => (i + delta + total) % total);
@@ -1103,9 +1186,13 @@ function Carousel({ items }) {
   };
 
   const art = items[currentArtIndex];
+  const isShared = sharedIdx >= 0 && sharedIdx === currentArtIndex;
   return (
     <section className="mt-7" aria-roledescription="קרוסלה" aria-label="יצירות בתערוכה">
       <div className="mx-auto w-full max-w-[17.75rem] sm:max-w-[22rem]" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {isShared && (
+          <p className="fade-in text-center font-museum text-amber-200/85 text-[0.85rem] mb-4">✦ רצו לשתף איתך את היצירה הזו ✦</p>
+        )}
         <div key={art.id} className="art-enter">
           <Artwork art={art} onZoom={setZoomed}
             frameSide={<>
@@ -1186,7 +1273,7 @@ const TABS = [
 ];
 
 function readHash() {
-  const h = (location.hash || '').replace('#', '');
+  const h = (location.hash || '').replace('#', '').split('/')[0];
   if (h === 'accessibility') return h;
   return TABS.some(t => t.id === h) ? h : 'home';
 }
