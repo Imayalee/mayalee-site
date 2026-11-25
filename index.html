@@ -59,6 +59,8 @@
  ]
 }
 </script>
+<!-- סטטיסטיקה אנונימית (GoatCounter): בלי עוגיות ובלי לזהות אף אחד. הספירה עצמה נשלחת מהקוד של האתר בכל מעבר לשונית -->
+<script data-goatcounter="https://mayaleelevy.goatcounter.com/count" data-goatcounter-settings='{"no_onload": true}' async src="//gc.zgo.at/count.js"></script>
 <title>מאיה לי לוי – האתר הרשמי</title>
 <!-- תצוגה מקדימה לקישור (וואטסאפ, פייסבוק, X וכו').
      אם כתובת האתר משתנה – לעדכן את SITE_URL בשתי השורות של og:url ו־og:image -->
@@ -1405,8 +1407,43 @@ function BackToTop() {
   );
 }
 
+/* ---------- סטטיסטיקה: ספירת "עמוד" לכל לשונית ---------- */
+const PAGE_TITLES = { home: 'הכל פה', archive: 'מחשבות על', museum: 'המוזיאון', accessibility: 'הצהרת נגישות' };
+function countView(path, title) {
+  try { if (localStorage.getItem('skipgc') === 't') return; } catch (e) {}
+  let tries = 0;
+  const send = () => {
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title });
+    else if (tries++ < 20) setTimeout(send, 500);   // הסקריפט נטען ברקע – מחכים לו עד 10 שניות
+  };
+  send();
+}
+
 function App() {
+  // מצב "אל תספרו אותי": נכנסים פעם אחת לכתובת עם ‎#toggle-goatcounter
+  const [gcNote, setGcNote] = useState(() => {
+    if (location.hash !== '#toggle-goatcounter') return null;
+    let off = false;
+    try {
+      off = localStorage.getItem('skipgc') !== 't';
+      off ? localStorage.setItem('skipgc', 't') : localStorage.removeItem('skipgc');
+      history.replaceState(null, '', '#home');
+    } catch (e) {}
+    return off ? 'סגור! הכניסות מהמכשיר הזה כבר לא ייספרו בסטטיסטיקה ✓' : 'הכניסות מהמכשיר הזה ייספרו שוב בסטטיסטיקה';
+  });
+  useEffect(() => { if (gcNote) { const t = setTimeout(() => setGcNote(null), 6000); return () => clearTimeout(t); } }, [gcNote]);
   const [tab, setTab] = useState(readHash());
+  // ספירה: בכניסה – לפי הכתובת המלאה (כולל פוסט/יצירה ששותפו), ובכל מעבר לשונית – לפי הלשונית
+  const firstView = React.useRef(true);
+  useEffect(() => {
+    let path = '/' + (tab === 'home' ? '' : tab);
+    if (firstView.current) {
+      firstView.current = false;
+      const h = (location.hash || '').replace('#', '');
+      if (h.includes('/')) path = '/' + h;
+    }
+    countView(path, PAGE_TITLES[tab] || tab);
+  }, [tab]);
   useEffect(() => {
     const onHash = () => setTab(readHash());
     window.addEventListener('hashchange', onHash);
@@ -1434,6 +1471,9 @@ function App() {
       <main className="flex-1">{tab === 'home' ? <HomePage /> : tab === 'archive' ? <ArchivePage /> : tab === 'accessibility' ? <AccessibilityPage onBack={() => change('home')} /> : <MuseumPage />}</main>
       <Footer flush={tab !== 'archive'} />
       <BackToTop />
+      {gcNote && (
+        <div role="status" className="fade-in fixed top-20 inset-x-4 z-[70] mx-auto max-w-sm rounded-2xl bg-grape-700 text-white text-center text-sm font-medium px-4 py-3 shadow-xl" onClick={() => setGcNote(null)}>{gcNote}</div>
+      )}
     </div>
   );
 }
